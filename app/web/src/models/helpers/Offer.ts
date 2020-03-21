@@ -2,14 +2,18 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
+import { Offer_Field } from './Offer_Field';
+import { Offer_Skill } from './Offer_Skill';
+
 export interface Offer
 {
 	id: string;
 	name: string|null;
-	fields: any[];
-	skills: any[];
+	fields: Offer_Field[];
+	skills: Offer_Skill[];
 	gender: string;
 	dateOfBirth: string;
+	experience: string|null;
 	phone: string|null;
 	email: string|null;
 	lastWorked: string|null;

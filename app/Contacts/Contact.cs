@@ -100,6 +100,7 @@ namespace MyContribution.Contacts
         public char Gender { get; set; }
         [Required]
         public DateTime DateOfBirth { get; set; }
+        public string Experience { get; set; }
         public string Phone { get; set; }
         [Required,EmailAddress]
         public string Email { get; set; }
@@ -129,7 +130,7 @@ namespace MyContribution.Contacts
         }
         public override bool Equals(object obj)
         {
-            return (obj as Offer_Field).OfferId == OfferId && (obj as Offer_Field).FieldId == FieldId;
+            return (obj as Offer_Field)?.OfferId == OfferId && (obj as Offer_Field)?.FieldId == FieldId;
         }
 
     }
@@ -145,7 +146,7 @@ namespace MyContribution.Contacts
         }
         public override bool Equals(object obj)
         {
-            return (obj as Offer_Skill).OfferId == OfferId && (obj as Offer_Skill).SkillId == SkillId;
+            return (obj as Offer_Skill)?.OfferId == OfferId && (obj as Offer_Skill)?.SkillId == SkillId;
         }
 
     }

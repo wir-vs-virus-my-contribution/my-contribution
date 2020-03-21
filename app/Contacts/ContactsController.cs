@@ -14,7 +14,7 @@ namespace MyContribution.Contacts
         public Guid[] Skills { get; set; }
     }
 
-    [Route("api/contacts")]
+    [Route("api/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     public class ContactsController : ControllerBase
@@ -100,7 +100,12 @@ namespace MyContribution.Contacts
 
             int start = 0;
             Guid krankenHausId = Guid.NewGuid();
-            IQueryable<Offer> searchResultAll = ctx.Offers.Where(v => v.Fields.Any(p => p.FieldId == selectedField));
+            IQueryable<Offer> searchResultAll = ctx.Offers
+                .Include(v => v.Fields)
+                .ThenInclude(v => v.Field)
+                .Include(v => v.Skills)
+                .ThenInclude(v => v.Skill)
+                .Where(v => v.Fields.Any(p => p.FieldId == selectedField));
             IQueryable<Offer> skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
             searchResultAll = searchResultAll.Except(skillmatch);
             skillmatch = skillmatch.OrderBy(v => v.Entfernung - start); //Vorschreiben
