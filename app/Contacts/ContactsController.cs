@@ -32,5 +32,14 @@ namespace MyContribution.Contacts
 
             return Created("odata/Contacts", contact);
         }
+
+        [HttpPost("createO")]
+        public async Task<ActionResult<Contact>> CreateOffer(Offer offer)
+        {
+            ctx.Offers.Add(offer);
+            await ctx.SaveChangesAsync();
+
+            return Created("odata/Contacts", offer);
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace MyContribution
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Offer> Offers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
