@@ -1,6 +1,7 @@
 import * as React from "react"
 import "./App.css"
-import { Menu, Icon, Layout, Breadcrumb } from "antd"
+import { Menu, Layout, Breadcrumb } from "antd"
+import { UserOutlined } from "@ant-design/icons"
 import { Introduction } from "./Introduction"
 import { Link, Router } from "@reach/router"
 import { CreateContact } from "./contacts/create-contact"
@@ -22,7 +23,7 @@ function App() {
         <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
           <Menu.Item>
             <Link to="/contacts/create">
-              <Icon type="user" />
+              <UserOutlined />
               <span>Create contact</span>
             </Link>
           </Menu.Item>
