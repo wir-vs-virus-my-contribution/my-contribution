@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Bogus;
@@ -73,17 +74,49 @@ namespace MyContribution
                     if (EnvironmentName == "Development" || EnvironmentName == "Test")
                     {
                         db.Database.EnsureCreated();
-                        var gender = new[] { 'm', 'f', 'd' };
-                        byte[] bytes = new byte[16];
+
+                        char[] gender = new[] { 'm', 'f', 'd' };
+
+                        Field[] fields = new[]
+                        {
+                            new Field{ Id=Guid.NewGuid(), Description = "",Title ="" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
+                        };
+
+                        Skill[] skills = new[]
+                        {
+                            new Skill{Id=Guid.NewGuid(),Title=""},
+                            new Skill{Id=Guid.NewGuid(),Title=""},
+                            new Skill{Id=Guid.NewGuid(),Title=""},
+                            new Skill{Id=Guid.NewGuid(),Title=""},
+                        };
+
                         //var fields = new[] { "Krankenhaus", "Pflege", "Botendienste", "Seelsorge", "Nichts Spezielles" };
                         //var skills = new[] { "Blut", "banana", "orange", "strawberry", "kiwi" };
-                        var offers = new Faker<Offer>()
+                        Faker faker = new Faker();
+                        List<Offer> offers = new Faker<Offer>()
+                            .RuleFor(v => v.Id, f => Guid.NewGuid())
                             .RuleFor(v => v.Name, f => f.Person.FullName)
                             .RuleFor(v => v.Gender, f => f.PickRandom(gender))
-                            .RuleFor(v => v.Fields, f => Enumerable.Range(1, f.Random.Int(1, 3)).Select(x => new Offer_Field() { OfferId=new Guid(), FieldId=new Guid(BitConverter.GetBytes(f.Random.Number(1, 5)).CopyTo(bytes, 0) }).ToList()))
-                            .Generate();
+                            //.RuleFor(v => v.Fields, f => Enumerable.Range(1, f.Random.Int(1, 3)).Select(x => new Offer_Field() { FieldId = f.PickRandom(fields).Id }).ToList())
+                            .RuleFor(v => v.Entfernung, f => f.Random.Decimal((decimal) 0.1, 100))
+                              //.RuleFor(v => v.Skills, f => Enumerable.Range(1, f.Random.Int(1, 3)).Select(x => new Offer_Skill() { SkillId = f.PickRandom(skills).Id }).ToList())
+                            .Generate(1000);
 
+                        foreach (Offer offer in offers)
+                        {
+                            offer.Skills = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Skill() { OfferId = offer.Id, SkillId = faker.PickRandom(skills).Id }).Distinct().ToList();
+                            offer.Fields = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Field() { OfferId = offer.Id, FieldId = faker.PickRandom(fields).Id }).Distinct().ToList();
+                        }
+
+                        db.Skills.AddRange(skills);
+                        db.Fields.AddRange(fields);
+
+                        db.SaveChanges();
                         db.Offers.AddRange(offers);
+                        db.SaveChanges();
                     }
                     else
                     {

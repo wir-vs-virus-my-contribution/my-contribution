@@ -1,10 +1,11 @@
 import * as React from "react"
 import "./App.css"
 import { Menu, Layout, Breadcrumb } from "antd"
-import { UserOutlined } from "@ant-design/icons"
+import { UserOutlined, GithubOutlined } from "@ant-design/icons"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { LandingPage } from "./landing-page/landig-page"
 import { RegisterView } from "./registration"
+import { Search } from "./search"
 const { Header, Footer, Sider, Content } = Layout
 
 function App() {
@@ -28,14 +29,26 @@ function App() {
             <Menu.Item>
               <Link to="/foo">KONTAKT</Link>
             </Menu.Item>
+            <Menu.Item>
+              <Link to="www.github.com" />
+              <GithubOutlined />
+            </Menu.Item>
           </Menu>
         </Header>
         <Content style={{ margin: "16px" }}>
-          <div style={{ padding: 10, background: "white", display: "flex" }}>
+          <div
+            style={{
+              padding: 10,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/register" element={<RegisterView />} />
-              <Route path="/foo" element={<div>bar</div>} />
+              <Route path="/search" element={<Search />}>
+                <Route path=":id" element={<div>Profil</div>}></Route>
+              </Route>
             </Routes>
           </div>
         </Content>

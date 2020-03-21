@@ -68,6 +68,7 @@ namespace MyContribution
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseInMemoryDatabase("dev-db");
+                options.EnableSensitiveDataLogging();
             });
         }
 

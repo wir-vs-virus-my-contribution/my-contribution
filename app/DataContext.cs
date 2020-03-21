@@ -24,9 +24,17 @@ namespace MyContribution
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Offer_Field> Offer_Field { get; set; }
         public DbSet<Field> Fields { get; set; }
+        public DbSet<Skill> Skills { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Offer_Field>().HasKey(v => new { v.FieldId, v.OfferId });
+            modelBuilder.Entity<Offer_Skill>().HasKey(v => new { v.SkillId, v.OfferId });
         }
     }
 

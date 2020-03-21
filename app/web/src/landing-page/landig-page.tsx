@@ -37,13 +37,14 @@ export function LandingPage() {
         >
           Ich möchte helfen
         </PrimaryButton>
-        <PrimaryButton size="large" type="primary">
+        <PrimaryButton
+          size="large"
+          type="primary"
+          onClick={() => navigate("/search")}
+        >
           Ich suche Hilfe
         </PrimaryButton>
       </Buttons>
-      <Row>
-        <Button>Ich kenne jemanden...</Button>
-      </Row>
     </Container>
   )
 }

@@ -109,21 +109,40 @@ namespace MyContribution.Contacts
         [Required]
         public int Radius { get; set; }
         public string Comment { get; set; }
-        public int Entfernung { get; set; }
+        public decimal Entfernung { get; set; }
 
     }
     public class Offer_Field
     {
-        public Guid Id { get; set; }
         public Guid OfferId { get; set; }
+        public Offer Offer { get; set; }
         public Guid FieldId { get; set; }
+        public Field Field { get; set; }
+
+        public override int GetHashCode()
+        {
+            return OfferId.GetHashCode() + FieldId.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            return (obj as Offer_Field).OfferId == OfferId && (obj as Offer_Field).FieldId == FieldId;
+        }
 
     }
     public class Offer_Skill
     {
-        public Guid Id { get; set; }
         public Guid OfferId { get; set; }
         public Guid SkillId { get; set; }
+        public Skill Skill { get; set; }
+
+        public override int GetHashCode()
+        {
+            return OfferId.GetHashCode() + SkillId.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            return (obj as Offer_Skill).OfferId == OfferId && (obj as Offer_Skill).SkillId == SkillId;
+        }
 
     }
     public class AddressRequest
