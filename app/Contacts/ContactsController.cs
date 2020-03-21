@@ -7,6 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MyContribution.Contacts
 {
+    public class Search
+    {
+        public AddressRequest Address { get; set; }
+        public Guid SelectedField { get; set; }
+        public Guid[] Skills { get; set; }
+    }
 
     [Route("api/contacts")]
     [ApiController]
@@ -66,7 +72,11 @@ namespace MyContribution.Contacts
         [HttpPost("createAccount")]
         public async Task<ActionResult<Account>> CreateAccount(AccountRequest request)
         {
-            var test = Search(null, new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"), new Guid[] { new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d") });
+            ActionResult<List<Offer>> test = await Search(new Search
+            {
+                SelectedField = new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),
+                Skills = new Guid[] { new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d") }
+            });
             Account acc = new Account()
             {
                 Username = request.Username,
@@ -82,19 +92,22 @@ namespace MyContribution.Contacts
             return Created("odata/Contacts", acc);
         }
 
-        [HttpGet("search")]
-        public List<Offer> Search(AddressRequest adr, Guid selectedField, Guid[] skills)
+        [HttpPost("search")]
+        public async Task<ActionResult<List<Offer>>> Search(Search search)
         {
-            var start = 0;
-            var krankenHausId = Guid.NewGuid();
-            var searchResultAll = ctx.Offers.Where(v => v.Fields.Any(p => p.FieldId == selectedField));
-            var skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
+            Guid selectedField = search.SelectedField;
+            Guid[] skills = search.Skills;
+
+            int start = 0;
+            Guid krankenHausId = Guid.NewGuid();
+            IQueryable<Offer> searchResultAll = ctx.Offers.Where(v => v.Fields.Any(p => p.FieldId == selectedField));
+            IQueryable<Offer> skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
             searchResultAll = searchResultAll.Except(skillmatch);
-            skillmatch = skillmatch.OrderBy(v => start - v.Entfernung); //Vorschreiben
-            searchResultAll = searchResultAll.OrderBy(v => start - v.Entfernung);
-            var resultList = skillmatch.ToList();
-            resultList.AddRange(searchResultAll.ToList());
-            return resultList;
+            skillmatch = skillmatch.OrderBy(v => v.Entfernung - start); //Vorschreiben
+            searchResultAll = searchResultAll.OrderBy(v => v.Entfernung - start);
+            List<Offer> resultList = await skillmatch.ToListAsync();
+            resultList.AddRange(await searchResultAll.ToListAsync());
+            return Ok(resultList);
         }
 
     }
