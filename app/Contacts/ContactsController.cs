@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,19 +36,46 @@ namespace MyContribution.Contacts
             return contact;
         }
 
-        [HttpPost("createO")]
-        public async Task<ActionResult<Contact>> CreateOffer(OfferRequest request)
+        [HttpPost("createOffer")]
+        public async Task<ActionResult<Offer>> CreateOffer(OfferRequest request)
         {
             Guid offerId = Guid.NewGuid();
             Offer offer = new Offer()
             {
                 Name = request.Name,
-                Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v })
+                Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v }).ToList(),
+                Gender = request.Gender,
+                DateOfBirth = request.DateOfBirth,
+                Phone = request.Phone,
+                Email = request.Email,
+                LastWorked = ctx.RelativeTimes.Find(request.LastWorkedId),
+                CoronaPassed = request.CoronaPassed,
+                Address = request.Address,
+                Radius = request.Radius,
+                Comment = request.Comment
             };
             ctx.Offers.Add(offer);
             await ctx.SaveChangesAsync();
 
             return Created("odata/Contacts", offer);
+        }
+
+        [HttpPost("createAccount")]
+        public async Task<ActionResult<Account>> CreateAccount(AccountRequest request)
+        {
+            Account acc = new Account()
+            {
+                Username = request.Username,
+                Institution = request.Institution,
+                PassHash = SHA.GenerateSHA512String(request.Password),
+                Email = request.Email,
+                Address = request.Address,
+                TimeOfRegister = request.TimeOfRegister
+            };
+            ctx.Accounts.Add(acc);
+            await ctx.SaveChangesAsync();
+
+            return Created("odata/Contacts", acc);
         }
     }
 }

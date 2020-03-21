@@ -21,6 +21,10 @@ namespace MyContribution
 
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Offer> Offers { get; set; }
+        public DbSet<RelativeTime> RelativeTimes { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Offer_Field> Offer_Field { get; set; }
+        public DbSet<Field> Fields { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
