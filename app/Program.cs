@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Bogus;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.KeyVault;
@@ -72,8 +73,14 @@ namespace MyContribution
                     if (EnvironmentName == "Development" || EnvironmentName == "Test")
                     {
                         db.Database.EnsureCreated();
+                        var gender = new[] { 'm', 'f', 'd' };
+                        byte[] bytes = new byte[16];
+                        //var fields = new[] { "Krankenhaus", "Pflege", "Botendienste", "Seelsorge", "Nichts Spezielles" };
+                        //var skills = new[] { "Blut", "banana", "orange", "strawberry", "kiwi" };
                         var offers = new Faker<Offer>()
                             .RuleFor(v => v.Name, f => f.Person.FullName)
+                            .RuleFor(v => v.Gender, f => f.PickRandom(gender))
+                            .RuleFor(v => v.Fields, f => Enumerable.Range(1, f.Random.Int(1, 3)).Select(x => new Offer_Field() { OfferId=new Guid(), FieldId=new Guid(BitConverter.GetBytes(f.Random.Number(1, 5)).CopyTo(bytes, 0) }).ToList()))
                             .Generate();
 
                         db.Offers.AddRange(offers);

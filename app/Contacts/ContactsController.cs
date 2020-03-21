@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,15 +44,18 @@ namespace MyContribution.Contacts
             {
                 Name = request.Name,
                 Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v }).ToList(),
+                Skills = request.Skills.Select(v => new Offer_Skill { OfferId = offerId, SkillId = v }).ToList(),
                 Gender = request.Gender,
                 DateOfBirth = request.DateOfBirth,
                 Phone = request.Phone,
                 Email = request.Email,
-                LastWorked = ctx.RelativeTimes.Find(request.LastWorkedId),
+                LastWorked = request.LastWorked,
+                AvailableFrom = request.AvailableFrom,
                 CoronaPassed = request.CoronaPassed,
                 Address = request.Address,
                 Radius = request.Radius,
-                Comment = request.Comment
+                Comment = request.Comment,
+                Entfernung = new Random().Next(1, 100)
             };
             ctx.Offers.Add(offer);
             await ctx.SaveChangesAsync();
@@ -77,5 +80,20 @@ namespace MyContribution.Contacts
 
             return Created("odata/Contacts", acc);
         }
+
+        public List<Offer> Search(AddressRequest adr, Guid selectedField, Guid[] skills)
+        {
+            var start = 0;
+            var krankenHausId = Guid.NewGuid();
+            var searchResultAll = ctx.Offers.Where(v => v.Fields.Any(p => p.FieldId == selectedField));
+            var skillmatch = searchResultAll.Where(v => v.Skills.Any(p => p.SkillId == selectedField));
+            searchResultAll = searchResultAll.Except(skillmatch);
+            skillmatch.OrderBy(v => start - v.Entfernung);
+            searchResultAll.OrderBy(v => start - v.Entfernung);
+            var resultList = skillmatch.ToList();
+            resultList.AddRange(searchResultAll.ToList());
+            return resultList;
+        }
+
     }
 }

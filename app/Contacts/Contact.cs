@@ -62,7 +62,9 @@ namespace MyContribution.Contacts
     {
         [Required]
         public string Name { get; set; }
+        [Required]
         public Guid[] Fields { get; set; }
+        public Guid[] Skills { get; set; }
         [Required]
         public char Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -71,10 +73,10 @@ namespace MyContribution.Contacts
         [Required, EmailAddress]
         public string Email { get; set; }
         [Required]
-        public int LastWorkedId { get; set; }
+        public string LastWorked { get; set; }
         public bool CoronaPassed { get; set; }
         [Required]
-        public int AvailableFromId { get; set; }
+        public string AvailableFrom { get; set; }
         [Required]
         public string Address { get; set; }
         [Required]
@@ -89,24 +91,25 @@ namespace MyContribution.Contacts
         public string Name { get; set; }
         [Required]
         public List<Offer_Field> Fields { get; set; }
+        public List<Offer_Skill> Skills { get; set; }
         [Required]
         public char Gender { get; set; }
         [Required]
         public DateTime DateOfBirth { get; set; }
-        [Phone]
         public string Phone { get; set; }
         [Required,EmailAddress]
         public string Email { get; set; }
         [Required]
-        public RelativeTime LastWorked { get; set; }
+        public string LastWorked { get; set; }
         public bool CoronaPassed { get; set; }
         [Required]
-        public RelativeTime AvailableFrom { get; set; }
+        public string AvailableFrom { get; set; }
         [Required]
         public string Address { get; set; }
         [Required]
         public int Radius { get; set; }
         public string Comment { get; set; }
+        public int Entfernung { get; set; }
 
     }
     public class Offer_Field
@@ -115,5 +118,27 @@ namespace MyContribution.Contacts
         public Guid OfferId { get; set; }
         public Guid FieldId { get; set; }
 
+    }
+    public class Offer_Skill
+    {
+        public Guid Id { get; set; }
+        public Guid OfferId { get; set; }
+        public Guid SkillId { get; set; }
+
+    }
+    public class AddressRequest
+    {
+        public string Full { get; set; }
+    }
+
+    public class Address
+    {
+        public string Full { get; set; }
+        public string Street { get; set; }
+        public int Number { get; set; }
+        public string Zip { get; set; }
+        public string Country { get; set; }
+        public string longitude { get; set; }
+        public string latitude { get; set; }
     }
 }
