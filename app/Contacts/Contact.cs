@@ -38,12 +38,16 @@ namespace MyContribution.Contacts
 
     public class AccountRequest
     {
+        [Required]
         public string Username { get; set; }
+        [Required]
         public string Institution { get; set; }
+        [Required]
         public string Password { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string Address { get; set; }
-        public DateTime TimeOfRegister { get; set; }
 
     }
     public class Account

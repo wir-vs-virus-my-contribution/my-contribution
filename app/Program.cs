@@ -82,11 +82,15 @@ namespace MyContribution
                             new Field{ Id=Guid.NewGuid(), Description = "",Title ="" },
                             new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
                             new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
                             new Field{ Id=new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),Description = "",Title ="" },
                         };
 
                         Skill[] skills = new[]
                         {
+                            new Skill{Id=Guid.NewGuid(),Title=""},
+                            new Skill{Id=Guid.NewGuid(),Title=""},
                             new Skill{Id=Guid.NewGuid(),Title=""},
                             new Skill{Id=Guid.NewGuid(),Title=""},
                             new Skill{Id=Guid.NewGuid(),Title=""},

@@ -66,7 +66,7 @@ namespace MyContribution.Contacts
         [HttpPost("createAccount")]
         public async Task<ActionResult<Account>> CreateAccount(AccountRequest request)
         {
-            Search(null, new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),new Guid[]{ new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d") });
+            var test = Search(null, new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"), new Guid[] { new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d") });
             Account acc = new Account()
             {
                 Username = request.Username,
@@ -74,7 +74,7 @@ namespace MyContribution.Contacts
                 PassHash = SHA.GenerateSHA512String(request.Password),
                 Email = request.Email,
                 Address = request.Address,
-                TimeOfRegister = request.TimeOfRegister
+                TimeOfRegister = DateTime.Now
             };
             ctx.Accounts.Add(acc);
             await ctx.SaveChangesAsync();
@@ -87,10 +87,10 @@ namespace MyContribution.Contacts
             var start = 0;
             var krankenHausId = Guid.NewGuid();
             var searchResultAll = ctx.Offers.Where(v => v.Fields.Any(p => p.FieldId == selectedField));
-            var skillmatch = searchResultAll.Where(v => v.Skills.Any(p => p.SkillId == selectedField));
+            var skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
             searchResultAll = searchResultAll.Except(skillmatch);
-            skillmatch.OrderBy(v => start - v.Entfernung);
-            searchResultAll.OrderBy(v => start - v.Entfernung);
+            skillmatch = skillmatch.OrderBy(v => start - v.Entfernung); //Vorschreiben
+            searchResultAll = searchResultAll.OrderBy(v => start - v.Entfernung);
             var resultList = skillmatch.ToList();
             resultList.AddRange(searchResultAll.ToList());
             return resultList;
