@@ -6,6 +6,10 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { LandingPage } from "./landing-page/landig-page"
 import { RegisterView } from "./registration"
 import { Search } from "./search"
+<<<<<<< HEAD
+=======
+import { Detail } from "./search/detail"
+>>>>>>> add search prototype
 const { Header, Footer, Sider, Content } = Layout
 
 function App() {
@@ -47,7 +51,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/register" element={<RegisterView />} />
               <Route path="/search" element={<Search />}>
-                <Route path=":id" element={<div>Profil</div>}></Route>
+                <Route path=":id" element={<Detail />}></Route>
               </Route>
             </Routes>
           </div>

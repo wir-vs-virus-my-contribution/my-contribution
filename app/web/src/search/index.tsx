@@ -5,7 +5,11 @@ import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { Formik } from "formik"
 import { getLocation, HighlightableRow } from "../utils"
 import styled from "styled-components"
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom"
+=======
+import { useNavigate, Outlet } from "react-router-dom"
+>>>>>>> add search prototype
 
 export function Search() {
   const navigate = useNavigate()
@@ -143,6 +147,10 @@ export function Search() {
           Anfragen senden
         </Button>
       </PageHeader>
+<<<<<<< HEAD
+=======
+      <Outlet />
+>>>>>>> add search prototype
     </Page>
   )
 }

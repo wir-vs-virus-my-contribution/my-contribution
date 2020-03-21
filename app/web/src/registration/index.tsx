@@ -31,13 +31,15 @@ export function RegisterView() {
           radius: 10,
           gender: "f",
           address: "dontcare",
-          availableFromId: 0,
+
+          availableFrom: "",
+          lastWorked: "",
+          skills: [],
           comment: "",
           coronaPassed: false,
           dateOfBirth: new Date().toISOString(),
           email: "example@email.com",
           fields: [],
-          lastWorkedId: 0,
           name: "name",
           phone: "12345",
         }}
