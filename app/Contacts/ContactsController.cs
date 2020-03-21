@@ -24,13 +24,14 @@ namespace MyContribution.Contacts
             return await ctx.Contacts.SingleAsync(v => v.Id == key);
         }
 
+        // /api/contacts/create?api-version=1.0
         [HttpPost("create")]
         public async Task<ActionResult<Contact>> CreateContact(Contact contact)
         {
             ctx.Contacts.Add(contact);
             await ctx.SaveChangesAsync();
 
-            return Created("odata/Contacts", contact);
+            return contact;
         }
 
         [HttpPost("createO")]
