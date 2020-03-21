@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MyContribution.Contacts
 {
 
-    [Route("api/[controller]")]
+    [Route("api/contacts")]
     [ApiController]
     [ApiVersion("1.0")]
     public class ContactsController : ControllerBase

@@ -2,9 +2,8 @@ import * as React from "react"
 import "./App.css"
 import { Menu, Layout, Breadcrumb } from "antd"
 import { UserOutlined } from "@ant-design/icons"
-import { Introduction } from "./Introduction"
-import { Link, Router } from "@reach/router"
 import { CreateContact } from "./contacts/create-contact"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 const { Header, Footer, Sider, Content } = Layout
 
 function App() {
@@ -22,10 +21,7 @@ function App() {
         />
         <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
           <Menu.Item>
-            <Link to="/contacts/create">
-              <UserOutlined />
-              <span>Create contact</span>
-            </Link>
+            <UserOutlined />
           </Menu.Item>
         </Menu>
       </Sider>
@@ -42,18 +38,8 @@ function App() {
             }}
             selectedKeys={[]}
           >
-            <Menu.Item key="mail">
-              <Icon type="mail" />
-              Mail
-            </Menu.Item>
-            <Menu.SubMenu
-              title={
-                <span>
-                  <Icon type="setting" />
-                  Settings
-                </span>
-              }
-            >
+            <Menu.Item key="mail">Mail</Menu.Item>
+            <Menu.SubMenu title={<span>Settings</span>}>
               <Menu.ItemGroup title="Item 1">
                 <Menu.Item key="setting:1">Option 1</Menu.Item>
                 <Menu.Item key="setting:2">Option 2</Menu.Item>
@@ -70,18 +56,23 @@ function App() {
             <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
           </Breadcrumb>
-
           <div style={{ padding: 10, background: "white" }}>
-            <Router primary={false}>
-              <Introduction path="/" />
-              <CreateContact path="/contacts/create" />
-            </Router>
+            <Route path="/sessions" element={<div>hi</div>} />
+            <Route path="/sessions" element={<div>hi</div>} />
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>asp-antd-react</Footer>
+        <Footer style={{ textAlign: "center" }}>WirVsCorona</Footer>
       </Layout>
     </Layout>
   )
 }
 
-export default App
+function Root() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  )
+}
+
+export default Root

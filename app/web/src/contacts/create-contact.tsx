@@ -35,6 +35,7 @@ export const CreateContact = (props: any) => {
           headers: { "content-type": "application/json" },
         })
         if (response.ok) {
+          const data = await response.json()
           message.success("success")
         } else {
           message.error("error: " + response.statusText)
@@ -56,7 +57,7 @@ export const CreateContact = (props: any) => {
               <Input name="firstName" />
             </FormItem>
             <FormItem name="lastName" label="Lastname">
-              <Input name="lastName" />
+              <Input name="lastName" placeholder="Nachname" />
             </FormItem>
             <FormItem name="email" label="Email">
               <Input name="email" />

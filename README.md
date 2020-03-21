@@ -21,9 +21,8 @@ git clone https://github.com/wir-vs-virus-my-contribution/my-contribution.git
 
 Frontend Dependencies installieren und Frontendprojekt starten:
 ```
-npm install
-npm run bootstrap
 cd app/web
+npm install
 npm run start
 ```
 
