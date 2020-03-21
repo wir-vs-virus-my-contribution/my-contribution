@@ -82,7 +82,7 @@ namespace MyContribution
                             new Field{ Id=Guid.NewGuid(), Description = "",Title ="" },
                             new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
                             new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
+                            new Field{ Id=new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),Description = "",Title ="" },
                         };
 
                         Skill[] skills = new[]
@@ -90,7 +90,7 @@ namespace MyContribution
                             new Skill{Id=Guid.NewGuid(),Title=""},
                             new Skill{Id=Guid.NewGuid(),Title=""},
                             new Skill{Id=Guid.NewGuid(),Title=""},
-                            new Skill{Id=Guid.NewGuid(),Title=""},
+                            new Skill{Id=new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d"),Title=""},
                         };
 
                         //var fields = new[] { "Krankenhaus", "Pflege", "Botendienste", "Seelsorge", "Nichts Spezielles" };

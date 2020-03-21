@@ -44,7 +44,7 @@ namespace MyContribution.Contacts
             {
                 Name = request.Name,
                 Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v }).ToList(),
-                Skills = request.Skills.Select(v => new Offer_Skill { OfferId = offerId, SkillId = v }).ToList(),
+                Skills = request.Skills.Select(v => new Offer_Skill { OfferId = offerId, SkillId = v }).ToList(),   //Kann null sein!!
                 Gender = request.Gender,
                 DateOfBirth = request.DateOfBirth,
                 Phone = request.Phone,
@@ -66,6 +66,7 @@ namespace MyContribution.Contacts
         [HttpPost("createAccount")]
         public async Task<ActionResult<Account>> CreateAccount(AccountRequest request)
         {
+            Search(null, new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),new Guid[]{ new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d") });
             Account acc = new Account()
             {
                 Username = request.Username,
