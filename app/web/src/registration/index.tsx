@@ -222,4 +222,5 @@ const ButtonRow = styled.div`
 
 const Label = styled.label`
   display: block;
+  margin-bottom: 6px;
 `
