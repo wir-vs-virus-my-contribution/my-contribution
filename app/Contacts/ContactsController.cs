@@ -105,8 +105,8 @@ namespace MyContribution.Contacts
             searchResultAll = searchResultAll.Except(skillmatch);
             skillmatch = skillmatch.OrderBy(v => v.Entfernung - start); //Vorschreiben
             searchResultAll = searchResultAll.OrderBy(v => v.Entfernung - start);
-            List<Offer> resultList = await skillmatch.ToListAsync();
-            resultList.AddRange(await searchResultAll.ToListAsync());
+            List<Offer> resultList = await skillmatch.Take(10).ToListAsync();
+            resultList.AddRange(await searchResultAll.Take(10).ToListAsync());
             return Ok(resultList);
         }
 

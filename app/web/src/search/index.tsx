@@ -11,10 +11,14 @@ import { useQuery } from "react-query"
 export function Search() {
   const navigate = useNavigate()
   const { status, data, error } = useQuery("todos", () =>
-    fetch(
-      "/api/contacts/search?selectedField=3f9bfdd3-6f79-4301-aa26-dd6e3b92a420&skills=1b02ca8b-9858-426c-8c7c-0d88cd2bb94d",
-      { headers: { Accept: "application/json" } },
-    ),
+    fetch("/api/contacts/search", {
+      method: "POST",
+      body: JSON.stringify({
+        selectedField: "3f9bfdd3-6f79-4301-aa26-dd6e3b92a420",
+        skills: ["1b02ca8b-9858-426c-8c7c-0d88cd2bb94d"],
+      }),
+      headers: { "content-type": "application/json" },
+    }).then(v => v.json()),
   )
   // field 3f9bfdd3-6f79-4301-aa26-dd6e3b92a420
   // skill 1b02ca8b-9858-426c-8c7c-0d88cd2bb94d
@@ -99,30 +103,34 @@ export function Search() {
             })}
             rowKey="id"
             size="small"
-            dataSource={[
-              {
-                id: "1",
-                name: "hans peter",
-                distance: "1 km",
-                profession: "Sanitäter",
-                skills: ["Sanitäter", "Blut abnehmen"],
-                experience: "10 Jahre",
-                geneder: "m",
-                age: "30",
-                availability: "Fulltime",
-              },
-              {
-                id: "2",
-                name: "hans peter",
-                distance: "1 km",
-                profession: "Sanitäter",
-                skills: ["Sanitäter", "Blut abnehmen"],
-                experience: "10 Jahre",
-                gender: "m",
-                age: "30",
-                availability: "Fulltime",
-              },
-            ]}
+            loading={status === "loading"}
+            dataSource={
+              data ? data : []
+              //   [
+              //   {
+              //     id: "1",
+              //     name: "hans peter",
+              //     distance: "1 km",
+              //     profession: "Sanitäter",
+              //     skills: ["Sanitäter", "Blut abnehmen"],
+              //     experience: "10 Jahre",
+              //     geneder: "m",
+              //     age: "30",
+              //     availability: "Fulltime",
+              //   },
+              //   {
+              //     id: "2",
+              //     name: "hans peter",
+              //     distance: "1 km",
+              //     profession: "Sanitäter",
+              //     skills: ["Sanitäter", "Blut abnehmen"],
+              //     experience: "10 Jahre",
+              //     gender: "m",
+              //     age: "30",
+              //     availability: "Fulltime",
+              //   },
+              // ]
+            }
             columns={[
               { dataIndex: "name", title: "Name" },
               { dataIndex: "distance", title: "Entfernung" },
