@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Bogus;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
+using MyContribution.Contacts;
 using Serilog;
 using Serilog.Core;
 
@@ -70,6 +72,11 @@ namespace MyContribution
                     if (EnvironmentName == "Development" || EnvironmentName == "Test")
                     {
                         db.Database.EnsureCreated();
+                        var offers = new Faker<Offer>()
+                            .RuleFor(v => v.Name, f => f.Person.FullName)
+                            .Generate();
+
+                        db.Offers.AddRange(offers);
                     }
                     else
                     {

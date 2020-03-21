@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.Identity.Client" Version="4.7.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.4" />
+    <PackageReference Include="Bogus" Version="29.0.1" />
   </ItemGroup>
 
   <ItemGroup>
