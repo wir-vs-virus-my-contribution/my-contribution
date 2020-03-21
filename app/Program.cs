@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
 
-namespace my_contribution
+namespace MyContribution
 {
     public class Program
     {

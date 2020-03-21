@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using my_contribution.Contacts;
+using MyContribution.Contacts;
 
-namespace my_contribution
+namespace MyContribution
 {
     //public class DbContextFactory : IDesignTimeDbContextFactory<DataContext>
     //{

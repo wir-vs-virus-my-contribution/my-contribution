@@ -2,7 +2,7 @@ using System;
 using Reinforced.Typings.Ast.TypeNames;
 using Reinforced.Typings.Fluent;
 
-namespace my_contribution
+namespace MyContribution
 {
     public class TypescriptGenerationConfiguration
     {

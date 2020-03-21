@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace my_contribution.Test
+namespace MyContribution.Test
 {
     [Collection("Database collection")]
     public abstract class BaseIntegrationTestClass : IDisposable

@@ -18,7 +18,7 @@ using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace my_contribution
+namespace MyContribution
 {
     public class Startup
     {

@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace my_contribution.Test
+namespace MyContribution.Test
 {
     [CollectionDefinition("Database collection")]
     public class CollectionFixture : ICollectionFixture<CustomWebApplicationFactory<Startup>>

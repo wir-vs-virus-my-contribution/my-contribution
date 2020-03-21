@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace my_contribution.Test
+namespace MyContribution.Test
 {
     public class CoreShould : BaseIntegrationTestClass
     {

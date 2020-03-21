@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
 
-namespace my_contribution.Contacts
+namespace MyContribution.Contacts
 {
     [ODataRoutePrefix("Contacts")]
     [ApiVersion("1.0")]

@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace my_contribution.Test
+namespace MyContribution.Test
 {
 
     public class CustomWebApplicationFactory<TEntryPoint>

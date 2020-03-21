@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace my_contribution.Contacts
+namespace MyContribution.Contacts
 {
 
     [Route("api/[controller]")]

@@ -1,6 +1,6 @@
 using System;
 
-namespace my_contribution.Contacts
+namespace MyContribution.Contacts
 {
     public class Contact
     {

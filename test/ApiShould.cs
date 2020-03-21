@@ -1,7 +1,7 @@
 using System.Net.Http;
 using Xunit;
 
-namespace my_contribution.Test
+namespace MyContribution.Test
 {
     public class ApiShould : BaseIntegrationTestClass
     {
