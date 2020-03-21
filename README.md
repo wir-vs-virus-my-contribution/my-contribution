@@ -4,6 +4,7 @@
 # Erste Schritte
 
 **Node** installieren: https://nodejs.org/en/
+
 **.NET Core SDK** installieren: https://dotnet.microsoft.com/download
 
 **Git** https://git-scm.com/downloads/guis
