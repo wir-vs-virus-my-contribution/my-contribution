@@ -46,6 +46,12 @@ namespace MyContribution.Contacts
 
     }
 
+    public class OfferRequest
+    {
+        public string Name { get; set; }
+        public Guid[] Fields { get; set; }
+    }
+
     public class Offer
     {
         public Guid Id { get; set; }

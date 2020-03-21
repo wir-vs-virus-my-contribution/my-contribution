@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +36,14 @@ namespace MyContribution.Contacts
         }
 
         [HttpPost("createO")]
-        public async Task<ActionResult<Contact>> CreateOffer(Offer offer)
+        public async Task<ActionResult<Contact>> CreateOffer(OfferRequest request)
         {
+            Guid offerId = Guid.NewGuid();
+            Offer offer = new Offer()
+            {
+                Name = request.Name,
+                Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v })
+            };
             ctx.Offers.Add(offer);
             await ctx.SaveChangesAsync();
 
