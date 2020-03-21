@@ -1,14 +1,6 @@
 import * as React from "react"
-<<<<<<< HEAD
-import {} from "react-router-dom"
 import { Modal } from "antd"
-
-export function Detail() {
-  const params = useParams()
-  return <Modal></Modal>
-=======
 import { useParams } from "react-router"
-import { Modal, notification } from "antd"
 import { useNavigate } from "react-router-dom"
 
 export function Detail() {
@@ -29,5 +21,4 @@ export function Detail() {
       hello
     </Modal>
   )
->>>>>>> add search prototype
 }

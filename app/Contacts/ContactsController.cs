@@ -82,6 +82,7 @@ namespace MyContribution.Contacts
             return Created("odata/Contacts", acc);
         }
 
+        [HttpGet("search")]
         public List<Offer> Search(AddressRequest adr, Guid selectedField, Guid[] skills)
         {
             var start = 0;

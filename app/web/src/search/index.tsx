@@ -5,16 +5,17 @@ import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { Formik } from "formik"
 import { getLocation, HighlightableRow } from "../utils"
 import styled from "styled-components"
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom"
-=======
 import { useNavigate, Outlet } from "react-router-dom"
->>>>>>> add search prototype
+import { useQuery } from "react-query"
 
 export function Search() {
   const navigate = useNavigate()
+  const { status, data, error } = useQuery("todos", () =>
+    fetch("/api/contacts/search"),
+  )
   return (
     <Page>
+      <pre>{JSON.stringify(status, data, error)}</pre>
       <PageHeader title="Suche">
         <Formik initialValues={{}} onSubmit={() => {}}>
           {f => (
@@ -119,18 +120,18 @@ export function Search() {
             ]}
             columns={[
               { dataIndex: "name", title: "Name" },
-              { dataIndex: "distance", title: "Name" },
-              { dataIndex: "profession", title: "Name" },
+              { dataIndex: "distance", title: "Entfernung" },
+              { dataIndex: "profession", title: "Beruf" },
               {
                 render: (row, record) => (
                   <div>{JSON.stringify(record.skills)}</div>
                 ),
-                title: "Skills",
+                title: "Fähigktein",
               },
-              { dataIndex: "experience", title: "Name" },
-              { dataIndex: "gender", title: "Name" },
-              { dataIndex: "age", title: "Name" },
-              { dataIndex: "availability", title: "Name" },
+              { dataIndex: "experience", title: "Erfahrung" },
+              { dataIndex: "gender", title: "Geschlecht" },
+              { dataIndex: "age", title: "Alter" },
+              { dataIndex: "availability", title: "Verfügbarkeit" },
               {
                 render: () => <Button type="link">Details</Button>,
               },
@@ -147,10 +148,7 @@ export function Search() {
           Anfragen senden
         </Button>
       </PageHeader>
-<<<<<<< HEAD
-=======
       <Outlet />
->>>>>>> add search prototype
     </Page>
   )
 }

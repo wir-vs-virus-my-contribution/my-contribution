@@ -6,10 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { LandingPage } from "./landing-page/landig-page"
 import { RegisterView } from "./registration"
 import { Search } from "./search"
-<<<<<<< HEAD
-=======
 import { Detail } from "./search/detail"
->>>>>>> add search prototype
 const { Header, Footer, Sider, Content } = Layout
 
 function App() {
