@@ -76,7 +76,6 @@ function App() {
         <Content style={{ margin: "16px" }}>
           <div
             style={{
-              padding: 10,
               display: "flex",
               justifyContent: "center",
             }}

@@ -79,6 +79,15 @@ namespace MyContribution
 
                         Field[] fields = new[]
                         {
+                              new Field { Id=Guid.NewGuid(),Description = "",Title ="Pflege",
+                                Skills = new[]
+                                {
+                                    new Skill{Id=Guid.NewGuid(),Title="Blut abnehmen"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Seelsorge"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Pflege"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Organisation"},
+                                }
+                            },
                             new Field{ Id=Guid.NewGuid(), Description = "",Title ="Krankenhaus",
                                 Skills = new[]
                                 {
@@ -91,12 +100,11 @@ namespace MyContribution
                                     new Skill{Id=Guid.NewGuid(),Title="Gesundheitsamt"},
                                 }
                             },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Pflege" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Notdienst" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Sonstiges" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Seelsorge" },
-                            new Field{ Id=new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),Description = "",Title ="Praxis" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Botendienst" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Notdienst", Skills = new List<Skill>() },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Sonstiges", Skills = new List<Skill>() },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Seelsorge", Skills = new List<Skill>() },
+                            new Field{ Id=new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),Description = "",Title ="Praxis", Skills = new List<Skill>() },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Botendienst", Skills = new List<Skill>() },
                         };
 
                         //Skill[] skills = new[]
@@ -118,17 +126,17 @@ namespace MyContribution
                             .RuleFor(v => v.CoronaPassed, f => f.Random.Bool())
                             .RuleFor(v => v.Distance, f => f.Random.Decimal((decimal) 0.1, 100))
                             .RuleFor(v => v.Experience, f => "" + f.Random.Number(1, 30))
-                            .RuleFor(v => v.AvailableFrom, f => "Vollzeit")
-                            .RuleFor(v => v.Address, f => "Nymphenburger Str. 12, 80636 München")
-                            .RuleFor(v => v.Comment, f => "Des isch voll geil hier")
-                            .RuleFor(v => v.Email, f => "peter.zwegatat@online.de")
-                            .RuleFor(v => v.Phone, f => "0157625344")
+                            .RuleFor(v => v.AvailableFrom, f => f.PickRandom(new[] { "Vollzeit", "Nachmittags", "Vormittags", "Nachtschicht" }))
+                            .RuleFor(v => v.Address, f => f.Address.FullAddress())
+                            .RuleFor(v => v.Comment, f => f.Lorem.Paragraph())
+                            .RuleFor(v => v.Email, f => f.Person.Email)
+                            .RuleFor(v => v.Phone, f => f.Person.Phone)
                             .RuleFor(v => v.DateOfBirth, f => DateTime.Now)
-                            .Generate(30);
+                            .Generate(100);
 
                         foreach (Offer offer in offers)
                         {
-                            offer.Skills = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Skill() { OfferId = offer.Id, SkillId = faker.PickRandom(fields[0].Skills).Id }).Distinct().ToList();
+                            offer.Skills = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Skill() { OfferId = offer.Id, SkillId = faker.PickRandom(fields.SelectMany(v => v.Skills)).Id }).Distinct().ToList();
                             offer.Fields = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Field() { OfferId = offer.Id, FieldId = faker.PickRandom(fields).Id }).Distinct().ToList();
                         }
 

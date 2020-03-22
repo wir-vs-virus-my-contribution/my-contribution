@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Modal, Row, Button } from "antd"
+import { Modal, Row, Button, Col } from "antd"
 import { useParams } from "react-router"
 import { useNavigate } from "react-router-dom"
 import { useQuery } from "react-query"
@@ -47,7 +47,10 @@ export function Detail() {
         <div>
           {Object.keys(offer).map((v, i) => (
             <Row key={i}>
-              {v}: {offer[v]}
+              <Col md={6}>
+                <b>{v}</b>
+              </Col>
+              <Col md={18}>{offer[v]}</Col>
             </Row>
           ))}
         </div>

@@ -9,8 +9,8 @@ namespace MyContribution.Backend
 {
     public class Search
     {
-        public AddressRequest Address { get; set; }
-        //public Guid SelectedField { get; set; }
+        //public AddressRequest Address { get; set; }
+        public Guid? SelectedField { get; set; }
         public Guid[] Skills { get; set; }
     }
 
@@ -102,15 +102,19 @@ namespace MyContribution.Backend
                 .ThenInclude(v => v.Field)
                 .Include(v => v.Skills)
                 .ThenInclude(v => v.Skill);
-                //.Where(v => v.Fields.Any(p => p.FieldId == selectedField));
-            IQueryable<Offer> skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
-            searchResultAll = searchResultAll.Where(v => v.Skills.All(p => skills.All(o => p.SkillId != o)));
+            //.Where(v => v.Fields.Any(p => p.FieldId == selectedField));
+            searchResultAll = search.Skills != null && search.Skills.Length > 0
+                ? searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)))
+                : searchResultAll;
+            searchResultAll = search.Skills == null || search.Skills.Length == 0
+                ? search.SelectedField.HasValue
+                ? searchResultAll.Where(v => v.Fields.Any(f => f.FieldId == search.SelectedField.Value))
+                : searchResultAll
+                : searchResultAll;
             //searchResultAll = searchResultAll.Except(skillmatch);
-            skillmatch = skillmatch.OrderBy(v => v.Distance - start);
+
             searchResultAll = searchResultAll.OrderBy(v => v.Distance - start);
-            List<Offer> resultList = await skillmatch.Take(10).ToListAsync();
-            resultList.AddRange(await searchResultAll.Take(10).ToListAsync());
-            return Ok(resultList);
+            return Ok(searchResultAll);
         }
 
     }

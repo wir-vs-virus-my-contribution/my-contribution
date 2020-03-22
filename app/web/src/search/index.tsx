@@ -17,6 +17,20 @@ import { useQuery } from "react-query"
 import { Offer } from "../models/helpers/Offer"
 import { Field } from "../models/helpers/Field"
 
+const getData: any = async (v: any, keys: any) => {
+  const response = await fetch("/api/offer/search", {
+    method: "POST",
+    body: JSON.stringify(keys),
+    headers: { "content-type": "application/json" },
+  })
+  if (response.ok) {
+    const data = (await response.json()) as Offer[]
+    return data
+  } else {
+    throw new Error(response.statusText)
+  }
+}
+
 export function Search() {
   const [selectedField, setSelectedField] = React.useState<string | null>(null)
   const [selectedSkills, setSelectedSkills] = React.useState<string[] | null>(
@@ -26,18 +40,10 @@ export function Search() {
   const navigate = useNavigate()
   const { data: fields } = useFields()
   const skills = React.useMemo(() => {
-    info("memo")
     if (fields) {
-      console.log(
-        selectedField,
-        fields.flatMap(v => v.skills),
-      )
-
       const skills = fields
         .flatMap(v => v.skills)
         .filter(v => v.fieldId == selectedField)
-
-      info("" + skills.length)
       return skills
     } else {
       return null
@@ -45,21 +51,17 @@ export function Search() {
   }, [selectedField, fields])
   const { data, error } = useQuery(
     ["offer", { selectedField, skills: selectedSkills }],
-    async keys => {
-      const response = await fetch("/api/offer/search", {
-        method: "POST",
-        body: JSON.stringify(keys),
-        headers: { "content-type": "application/json" },
-      })
-      if (response.ok) {
-        const data = (await response.json()) as Offer[]
-        return data
-      } else {
-        throw new Error(response.statusText)
-      }
-    },
+    getData,
     { retry: 1 },
   )
+
+  const [searchResult, setSearchResult] = React.useState<Offer[]>([])
+
+  React.useEffect(() => {
+    if (data) {
+      setSearchResult(data as any)
+    }
+  }, [data])
 
   return (
     <Page>
@@ -70,57 +72,56 @@ export function Search() {
           {f => (
             <Form>
               <SearchBar>
-                <I.Group>
-                  <Input
-                    name="address"
-                    placeholder="Adresse Einsatzort"
-                    style={{ width: "200px" }}
-                    disabled={true}
-                    suffix={
-                      <AimOutlined
-                        onClick={async () => {
-                          try {
-                            const location = await getLocation()
-                            const address = await getAddress(location)
-                            f.setFieldValue("address", address)
-                            f.setFieldValue("location", location)
-                          } catch (E) {}
-                        }}
-                      />
-                    }
-                  />
-                  <Select
-                    placeholder="Bereich"
-                    name="domain"
-                    style={{ width: "150px" }}
-                    onChange={(value, option) => {
-                      info(value)
-                      setSelectedField(value)
-                    }}
-                  >
-                    {fields
-                      ? fields.map((v: Field) => (
-                          <Select.Option key={v.id} value={v.id}>
-                            {v.title}
-                          </Select.Option>
-                        ))
-                      : []}
-                  </Select>
-                  <Select
-                    mode="multiple"
-                    placeholder="Fähigkeiten"
-                    name="skills"
-                    style={{ width: "400px" }}
-                  >
-                    {skills
-                      ? skills.map(v => (
-                          <Select.Option key={v.id} value={v.id}>
-                            {v.title}
-                          </Select.Option>
-                        ))
-                      : []}
-                  </Select>
-                </I.Group>
+                <Input
+                  name="address"
+                  placeholder="Adresse Einsatzort"
+                  style={{ width: "250px" }}
+                  suffix={
+                    <AimOutlined
+                      onClick={async () => {
+                        try {
+                          const location = await getLocation()
+                          const address = await getAddress(location)
+                          f.setFieldValue("address", address)
+                          f.setFieldValue("location", location)
+                        } catch (E) {}
+                      }}
+                    />
+                  }
+                />
+                <Select
+                  placeholder="Bereich"
+                  name="domain"
+                  style={{ width: "150px", marginLeft: 5 }}
+                  onChange={(value, option) => {
+                    setSelectedField(value)
+                  }}
+                >
+                  {fields
+                    ? fields.map((v: Field) => (
+                        <Select.Option key={v.id} value={v.id}>
+                          {v.title}
+                        </Select.Option>
+                      ))
+                    : []}
+                </Select>
+                <Select
+                  mode="multiple"
+                  placeholder="Fähigkeiten"
+                  name="skills"
+                  style={{ width: "400px", marginLeft: 5 }}
+                  onChange={(value, option) => {
+                    setSelectedSkills(value)
+                  }}
+                >
+                  {skills
+                    ? skills.map(v => (
+                        <Select.Option key={v.id} value={v.id}>
+                          {v.title}
+                        </Select.Option>
+                      ))
+                    : []}
+                </Select>
               </SearchBar>
             </Form>
           )}
@@ -142,10 +143,9 @@ export function Search() {
             })}
             rowKey="id"
             size="small"
-            loading={{ spinning: !Boolean(data) && !error, delay: 200 }}
-            dataSource={data ? data : []}
+            loading={{ spinning: !Boolean(searchResult) && !error, delay: 50 }}
+            dataSource={searchResult ? searchResult : []}
             columns={[
-              { dataIndex: "name", title: "Name" },
               {
                 render: (v, r) => <div>{r.distance.toFixed(2)} km</div>,
                 title: "Entfernung",
@@ -179,12 +179,12 @@ export function Search() {
               { render: (v, r) => r.experience, title: "Erfahrung" },
               { render: (v, r) => r.gender, title: "Geschlecht" },
               { render: (v, r) => "30", title: "Alter" },
-              { dataIndex: "availability", title: "Verfügbarkeit" },
+              { render: (v, r) => r.availableFrom, title: "Verfügbarkeit" },
               {
                 render: () => <Button type="link">Details</Button>,
               },
             ]}
-            pagination={false}
+            pagination={{ pageSize: 15 }}
           />
         </div>
         <Button
@@ -206,7 +206,7 @@ const SearchBar = styled.div`
 `
 
 const Page = styled.div`
-  width: 1000px;
+  width: 1200px;
 `
 
 // const ListItem = styled(List.Item)`
