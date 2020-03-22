@@ -40,6 +40,7 @@ export function RegisterView() {
       <Formik<OfferRequest>
         validationSchema={SignupSchema}
         initialValues={{
+          id: "",
           radius: 10,
           gender: "",
           address: "",

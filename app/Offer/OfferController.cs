@@ -82,7 +82,7 @@ namespace MyContribution.Backend
             offer.Address = request.Address;
             offer.Radius = request.Radius;
             offer.Comment = request.Comment;
-            offer.Entfernung = new Random().Next(1, 100);
+            offer.Distance = new Random().Next(1, 100);
 
             await ctx.SaveChangesAsync();
 
