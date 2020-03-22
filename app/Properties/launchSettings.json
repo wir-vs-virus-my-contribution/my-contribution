@@ -4,7 +4,6 @@
     "anonymousAuthentication": true
   },
   "profiles": {
-
     "app": {
       "commandName": "Project",
       "launchBrowser": true,

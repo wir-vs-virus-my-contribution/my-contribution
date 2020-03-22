@@ -3,7 +3,7 @@ import { PageHeader, Input as I, Table, Button, Checkbox } from "antd"
 import { Input, Form, FormikDebug, Select } from "formik-antd"
 import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { Formik } from "formik"
-import { getLocation, HighlightableRow } from "../utils"
+import { getLocation, HighlightableRow, ErrorBanner } from "../utils"
 import styled from "styled-components"
 import { useNavigate, Outlet } from "react-router-dom"
 import { useQuery } from "react-query"
@@ -21,10 +21,10 @@ export function Search() {
       headers: { "content-type": "application/json" },
     }).then(v => v.json()),
   )
-  // field 3f9bfdd3-6f79-4301-aa26-dd6e3b92a420
-  // skill 1b02ca8b-9858-426c-8c7c-0d88cd2bb94d
+
   return (
     <Page>
+      <ErrorBanner message={error} />
       <PageHeader title="Suche">
         <Formik initialValues={{}} onSubmit={() => {}}>
           {f => (
@@ -104,33 +104,7 @@ export function Search() {
             rowKey="id"
             size="small"
             loading={status === "loading"}
-            dataSource={
-              data ? data : []
-              //   [
-              //   {
-              //     id: "1",
-              //     name: "hans peter",
-              //     distance: "1 km",
-              //     profession: "Sanitäter",
-              //     skills: ["Sanitäter", "Blut abnehmen"],
-              //     experience: "10 Jahre",
-              //     geneder: "m",
-              //     age: "30",
-              //     availability: "Fulltime",
-              //   },
-              //   {
-              //     id: "2",
-              //     name: "hans peter",
-              //     distance: "1 km",
-              //     profession: "Sanitäter",
-              //     skills: ["Sanitäter", "Blut abnehmen"],
-              //     experience: "10 Jahre",
-              //     gender: "m",
-              //     age: "30",
-              //     availability: "Fulltime",
-              //   },
-              // ]
-            }
+            dataSource={data ? data : []}
             columns={[
               { dataIndex: "name", title: "Name" },
               {

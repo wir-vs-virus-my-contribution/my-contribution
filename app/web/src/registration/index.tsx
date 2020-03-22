@@ -17,8 +17,20 @@ import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { OfferRequest } from "../models/helpers/OfferRequest"
 import { Offer } from "../models/helpers/Offer"
 import { Profile } from "./profile"
+import { getLocation } from "../utils"
+import { Yup } from "yup"
 
 const { Step } = Steps
+
+Yup.string().test(function(value) {
+  const { email } = this.parent
+  if (!email) return value != null
+  return true
+})
+
+const SignupSchema = Yup.object().shape({
+  email: Yup.string().required("Required"),
+})
 
 export function RegisterView() {
   const [current, setCurrent] = React.useState(0)
@@ -30,8 +42,7 @@ export function RegisterView() {
         initialValues={{
           radius: 10,
           gender: "f",
-          address: "dontcare",
-
+          address: "",
           availableFrom: "",
           lastWorked: "",
           skills: [],
@@ -42,6 +53,8 @@ export function RegisterView() {
           fields: [],
           name: "name",
           phone: "12345",
+          location: null,
+          experience: 0,
         }}
         onSubmit={async values => {
           notification.info({ message: "submitting" })
@@ -53,6 +66,12 @@ export function RegisterView() {
           if (response.ok) {
             const data = (await response.json()) as Offer
             setShowSuccess(data)
+          } else {
+            const text = await response.text()
+            notification.error({
+              description: text,
+              message: response.statusText,
+            })
           }
         }}
       >
@@ -75,7 +94,7 @@ export function RegisterView() {
                   <div>
                     <Row>
                       <Label>
-                        In welchen Bereich kannst du Unterstützung anbieten?
+                        In welchem Bereich kannst du Unterstützung anbieten?
                       </Label>
                       <Checkbox.Group
                         name="domains"
@@ -115,9 +134,14 @@ export function RegisterView() {
                     </Row>
                     <Row>
                       <Label>
-                        Wieviele Jahre Beruferfahrung hast du insgesamt?
+                        Wieviele Jahre Berufserfahrung hast du insgesamt?
                       </Label>
-                      <InputNumber size="large" name="experience" />
+                      <InputNumber
+                        size="large"
+                        style={{ width: "400px" }}
+                        min={-1}
+                        name="experience"
+                      />
                     </Row>
                   </div>
                   <ButtonRow>
@@ -140,30 +164,25 @@ export function RegisterView() {
                     <Row>
                       <Label>Wie lautet deine ungefähre Adresse?</Label>
                       <Input
-                        name="adress"
+                        name="address"
                         suffix={
                           <Button
-                            onClick={() => {
-                              if (navigator.geolocation) {
-                                navigator.geolocation.getCurrentPosition(
-                                  location => {
-                                    notification.info({
-                                      message:
-                                        "Latitude: " +
-                                        location.coords.latitude +
-                                        "<br>Longitude: " +
-                                        location.coords.longitude +
-                                        " " +
-                                        JSON.stringify(location),
-                                    })
-                                  },
+                            onClick={async () => {
+                              try {
+                                const location = await getLocation()
+                                const response = await fetch(
+                                  `/api/locations/coordinates-to-address?longitude=${location.longitude}&latitude=${location.latitude}`,
                                 )
-                              } else {
-                                notification.error({
-                                  message:
-                                    "Geolocation is not supported by this browser.",
-                                })
-                              }
+                                if (!response.ok) {
+                                  notification.error({
+                                    message: response.statusText,
+                                  })
+                                  return
+                                }
+                                const address = await response.text()
+                                f.setFieldValue("address", address)
+                                f.setFieldValue("location", location)
+                              } catch {}
                             }}
                           >
                             <AimOutlined />
@@ -297,4 +316,5 @@ const ButtonRow = styled.div`
 const Label = styled.label`
   display: block;
   margin-bottom: 6px;
+  font-size: 1.5rem !important;
 `

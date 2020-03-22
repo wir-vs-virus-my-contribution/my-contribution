@@ -21,10 +21,10 @@ body {
   line-height: normal;
 }
 
-.label,
+/* .label,
 label {
-  font-size: 1.6rem;
-}
+  font-size: 1.6rem !important;
+} */
 
 .ant-card {
   box-shadow: 0 3.2px 7.2px 0 var(--callout-shadow-color, rgba(0, 0, 0, 0.132)),

@@ -1,7 +1,14 @@
-import { notification } from "antd"
+import { notification, Alert } from "antd"
 import * as React from "react"
 import styled from "styled-components"
-import { grey } from "@ant-design/colors"
+
+export function ErrorBanner({ message }: { message: any }) {
+  return (
+    message && (
+      <Alert type="error" style={{ margin: 10 }} message={message.toString()} />
+    )
+  )
+}
 
 export function getLocation() {
   var promise = new Promise<{ longitude: number; latitude: number }>(

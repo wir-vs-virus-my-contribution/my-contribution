@@ -15,6 +15,8 @@ export interface OfferRequest
 	coronaPassed: boolean;
 	availableFrom: string|null;
 	address: string|null;
+	location: any;
+	experience: number;
 	radius: number;
 	comment: string|null;
 }

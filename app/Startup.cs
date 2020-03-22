@@ -88,7 +88,7 @@ namespace MyContribution
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseMvc(routes =>
             {
@@ -108,6 +108,8 @@ namespace MyContribution
                     });
                 });
             }
+
+            app.UseSpaStaticFiles();
 
             app.UseSpa(spa =>
             {

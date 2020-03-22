@@ -37,28 +37,10 @@
         "description": "The name of the app, is suffix to several resources."
       }
     },
-    "sqlAdministratorLogin": {
-      "type": "string",
-      "metadata": {
-        "description": "The admin user of the SQL Server"
-      }
-    },
-    "sqlAdministratorLoginPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "The password of the admin user of the SQL Server"
-      }
-    },
     "suffix": {
       "type": "string",
       "metadata": {
         "description": "Appended to several resoures"
-      }
-    },
-    "tenantId": {
-      "type": "string",
-      "metadata": {
-        "description": "Tenant Id used for the KeyVault"
       }
     },
     "location": {
@@ -70,60 +52,10 @@
     }
   },
   "variables": {
-    "hostingPlanName": "[concat(parameters('appName'),'-hostingplan')]",
-    "webSiteName": "[concat(parameters('appName'),'-app-', parameters('suffix'))]",
-    "sqlserverName": "[concat(parameters('appName'),'-sqlserver-',uniqueString(resourceGroup().id))]",
-    "databaseName": "[concat(parameters('appName'),'-db-', parameters('suffix'))]",
-    "keyvaultName": "[concat(parameters('appName'),'-vlt-', parameters('suffix'))]"
+    "hostingPlanName": "[concat('hosting-plan-', uniqueString(resourceGroup().id))]",
+    "webSiteName": "[concat(parameters('appName'),'-app-', parameters('suffix'))]"
   },
   "resources": [
-    {
-      "name": "[variables('sqlserverName')]",
-      "type": "Microsoft.Sql/servers",
-      "location": "[parameters('location')]",
-      "tags": {
-        "displayName": "SqlServer"
-      },
-      "apiVersion": "2014-04-01",
-      "properties": {
-        "administratorLogin": "[parameters('sqlAdministratorLogin')]",
-        "administratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
-        "version": "12.0"
-      },
-      "resources": [
-        {
-          "name": "[variables('databaseName')]",
-          "type": "databases",
-          "location": "[parameters('location')]",
-          "tags": {
-            "displayName": "Database"
-          },
-          "apiVersion": "2015-01-01",
-          "dependsOn": [
-            "[variables('sqlserverName')]"
-          ],
-          "properties": {
-            "edition": "Basic",
-            "collation": "SQL_Latin1_General_CP1_CI_AS",
-            "maxSizeBytes": "1073741824",
-            "requestedServiceObjectiveName": "Basic"
-          }
-        },
-        {
-          "type": "firewallrules",
-          "apiVersion": "2014-04-01",
-          "dependsOn": [
-            "[variables('sqlserverName')]"
-          ],
-          "location": "[parameters('location')]",
-          "name": "AllowAllWindowsAzureIps",
-          "properties": {
-            "endIpAddress": "0.0.0.0",
-            "startIpAddress": "0.0.0.0"
-          }
-        }
-      ]
-    },
     {
       "apiVersion": "2016-03-01",
       "name": "[variables('hostingPlanName')]",
@@ -158,38 +90,11 @@
       "properties": {
         "name": "[variables('webSiteName')]",
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
-      },
-      "resources": [
-        {
-          "type":"config",
-          "name":"appsettings",
-          "apiVersion":"2016-03-01",
-          "dependsOn": [
-            "[variables('webSiteName')]"
-          ],
-          "properties":{
-            "KeyVaultName": "[variables('keyvaultName')]"
-          }
-        },
-        {
-          "apiVersion": "2016-03-01",
-          "type": "config",
-          "name": "connectionstrings",
-          "dependsOn": [
-            "[variables('webSiteName')]"
-          ],
-          "properties": {
-            "DefaultConnection": {
-              "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databaseName'), ';User Id=', parameters('sqlAdministratorLogin'), '@', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ';Password=', parameters('sqlAdministratorLoginPassword'), ';')]",
-              "type": "SQLAzure"
-            }
-          }
-        }
-      ]
+      }
     },
     {
       "apiVersion": "2015-05-01",
-      "name": "[concat('AppInsights-', variables('webSiteName'))]",
+      "name": "[concat(variables('webSiteName'),'-ai-', parameters('suffix'))]",
       "type": "Microsoft.Insights/components",
       "location": "[parameters('location')]",
       "dependsOn": [
@@ -202,43 +107,6 @@
       "properties": {
         "ApplicationId": "[variables('webSiteName')]"
       }
-    },
-    {
-      "name": "[variables('keyvaultName')]",
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "2016-10-01",
-      "location": "[parameters('location')]",
-      "properties": {
-        "tenantId": "[parameters('tenantId')]",
-        "sku": {
-          "family": "A",
-          "name": "standard"
-        },
-        "accessPolicies": [{
-          "tenantId": "[parameters('tenantId')]",
-          "objectId": "[reference(concat(resourceId('Microsoft.Web/sites', variables('webSiteName')),'/providers/Microsoft.ManagedIdentity/Identities/default'),'2015-08-31-PREVIEW').principalId]",
-          "permissions":{
-            "keys": [ "all" ],
-            "secrets": [ "all" ]
-          }
-        }],
-        "enabledForDeployment": false,
-        "enabledForDiskEncryption": false,
-        "enabledForTemplateDeployment": false
-      },
-      "resources": []
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/secrets",
-      "name": "[concat(variables('keyvaultName'),'/ConnectionString')]",
-      "apiVersion": "2015-06-01",
-      "properties": {
-        "contentType": "text/plain",
-        "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('databaseName'), ';User Id=', parameters('sqlAdministratorLogin'), '@', reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ';Password=', parameters('sqlAdministratorLoginPassword'), ';')]"
-      },
-      "dependsOn": [
-        "[variables('keyvaultName')]"
-      ]
     }
   ],
   "outputs": {
@@ -249,10 +117,6 @@
     "siteUri": {
       "type": "string",
       "value": "[reference(concat('Microsoft.Web/sites/', variables('webSiteName'))).hostnames[0]]"
-    },
-    "sqlSvrFqdn": {
-      "type": "string",
-      "value": "[reference(concat('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName]"
     }
   }
 }

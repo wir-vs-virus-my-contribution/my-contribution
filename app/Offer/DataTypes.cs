@@ -64,28 +64,32 @@ namespace MyContribution.Backend
 
     public class OfferRequest
     {
-        [Required]
         public string Name { get; set; }
         [Required]
         public Guid[] Fields { get; set; }
         public Guid[] Skills { get; set; }
-        [Required]
         public char Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
-        [Phone]
         public string Phone { get; set; }
-        [Required, EmailAddress]
         public string Email { get; set; }
-        [Required]
         public string LastWorked { get; set; }
         public bool CoronaPassed { get; set; }
-        [Required]
         public string AvailableFrom { get; set; }
-        [Required]
         public string Address { get; set; }
+        public Location Location { get; set; }
+        /// <summary>
+        /// Years of professional experience
+        /// </summary>
+        public int Experience { get; set; }
         [Required]
         public int Radius { get; set; }
         public string Comment { get; set; }
+    }
+
+    public class Location
+    {
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
     }
 
     public class Offer

@@ -71,7 +71,7 @@ namespace MyContribution
                 {
                     DataContext db = scope.ServiceProvider.GetRequiredService<DataContext>();
                     db = scope.ServiceProvider.GetRequiredService<DataContext>();
-                    if (EnvironmentName == "Development" || EnvironmentName == "Test")
+                    if (EnvironmentName == "Development" || EnvironmentName == "Test" || EnvironmentName == "Production")
                     {
                         db.Database.EnsureCreated();
 

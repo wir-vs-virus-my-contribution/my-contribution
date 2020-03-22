@@ -1,19 +1,46 @@
 import * as React from "react"
 import "./App.css"
 import { Menu, Layout, Breadcrumb } from "antd"
-import { UserOutlined, GithubOutlined } from "@ant-design/icons"
+import {
+  UserOutlined,
+  GithubOutlined,
+  SearchOutlined,
+  IdcardOutlined,
+} from "@ant-design/icons"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { LandingPage } from "./landing-page/landig-page"
 import { RegisterView } from "./registration"
 import { Search } from "./search"
 import { Detail } from "./search/detail"
+
 const { Header, Footer, Sider, Content } = Layout
 
 function App() {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Layout>
-        <Header style={{ background: "#fff", height: "auto", padding: 0 }}>
+        <Header
+          style={{
+            background: "#fff",
+            height: "auto",
+            padding: 0,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Menu mode="horizontal" style={{}} selectedKeys={[]}>
+            <Menu.Item>
+              <Link to="/search">
+                SUCHE <SearchOutlined />
+              </Link>
+            </Menu.Item>
+            <Menu.Item>
+              <Link to="/register">
+                ANMELDEN <IdcardOutlined />
+              </Link>
+            </Menu.Item>
+          </Menu>
           <Menu
             mode="horizontal"
             style={{
@@ -31,7 +58,10 @@ function App() {
               <Link to="/foo">KONTAKT</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to="www.github.com" />
+              <a
+                href="https://github.com/wir-vs-virus-my-contribution/my-contribution"
+                target="blank"
+              />
               <GithubOutlined />
             </Menu.Item>
           </Menu>
@@ -53,7 +83,10 @@ function App() {
             </Routes>
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>WirVsCorona</Footer>
+        <Footer style={{ textAlign: "center" }}>
+          Corona Helden v{process.env["REACT_APP_BUILD_BUILDID"]} |{" "}
+          {process.env["REACT_APP_BUILD_BUILDNUMBER"]}{" "}
+        </Footer>
       </Layout>
     </Layout>
   )

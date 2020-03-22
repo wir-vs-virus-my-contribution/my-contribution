@@ -1,4 +1,10 @@
-# WirVsVirus Rekrutierung von qualifizierten Helfern im Medizin- und Pflegebereich
+![Azure DevOps builds](https://img.shields.io/azure-devops/build/jannikb/wir-vs-corona/43)
+
+Live version: https://corona-helden-app-prod.azurewebsites.net/
+
+
+# WirVsVirus Rekrutierung von mehr- und weniger qualifizierten Helfern im Medizin- und Pflegebereich
+
 
 
 # Erste Schritte
