@@ -42,7 +42,7 @@ namespace MyContribution.Backend
                 Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v }).ToList(),
                 Skills = request.Skills.Select(v => new Offer_Skill { OfferId = offerId, SkillId = v }).ToList(),   //Kann null sein!!
                 Gender = request.Gender,
-                DateOfBirth = request.DateOfBirth,
+                DateOfBirth = request.Age != null ? DateTime.UtcNow.AddYears(-request.Age.Value) : null as DateTime?,
                 Phone = request.Phone,
                 Email = request.Email,
                 LastWorked = request.LastWorked,

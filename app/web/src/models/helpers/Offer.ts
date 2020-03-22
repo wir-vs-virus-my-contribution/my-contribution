@@ -12,7 +12,7 @@ export interface Offer
 	fields: Offer_Field[];
 	skills: Offer_Skill[];
 	gender: string;
-	dateOfBirth: string;
+	dateOfBirth: string|null;
 	experience: string|null;
 	phone: string|null;
 	email: string|null;

@@ -261,7 +261,6 @@ export function EditView() {
           </Form>
         )}
       </Formik>
-      {showSuccess && <Profile offer={showSuccess} />}
     </Card>
   )
 }

@@ -17,19 +17,15 @@ import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { OfferRequest } from "../models/helpers/OfferRequest"
 import { Offer } from "../models/helpers/Offer"
 import { Profile } from "./profile"
-import { getLocation } from "../utils"
-import { Yup } from "yup"
+import { getLocation, getAddress } from "../utils"
+import * as Yup from "yup"
 
 const { Step } = Steps
 
-Yup.string().test(function(value) {
-  const { email } = this.parent
-  if (!email) return value != null
-  return true
-})
-
 const SignupSchema = Yup.object().shape({
-  email: Yup.string().required("Required"),
+  email: Yup.string()
+    .email()
+    .required("Required"),
 })
 
 export function RegisterView() {
@@ -39,20 +35,21 @@ export function RegisterView() {
   return (
     <Card style={{ margin: 60, width: 700 }}>
       <Formik<OfferRequest>
+        validationSchema={SignupSchema}
         initialValues={{
           radius: 10,
-          gender: "f",
+          gender: "",
           address: "",
           availableFrom: "",
           lastWorked: "",
           skills: [],
           comment: "",
           coronaPassed: false,
-          dateOfBirth: new Date().toISOString(),
-          email: "example@email.com",
+          age: null,
+          email: "",
           fields: [],
-          name: "name",
-          phone: "12345",
+          name: "",
+          phone: "",
           location: null,
           experience: 0,
         }}
@@ -170,16 +167,8 @@ export function RegisterView() {
                             onClick={async () => {
                               try {
                                 const location = await getLocation()
-                                const response = await fetch(
-                                  `/api/locations/coordinates-to-address?longitude=${location.longitude}&latitude=${location.latitude}`,
-                                )
-                                if (!response.ok) {
-                                  notification.error({
-                                    message: response.statusText,
-                                  })
-                                  return
-                                }
-                                const address = await response.text()
+                                const address = await getAddress(location)
+
                                 f.setFieldValue("address", address)
                                 f.setFieldValue("location", location)
                               } catch {}
@@ -249,10 +238,12 @@ export function RegisterView() {
                         <Input name="lastName" placeholder="Nachname" />
                       </Field>
                       <Field>
-                        <Input name="Telefon" placeholder="Telefon" />
+                        <Input name="phone" placeholder="Telefon" />
                       </Field>
                       <Field>
-                        <Input name="Email" placeholder="Email" />
+                        <Form.Item name="email">
+                          <Input name="email" placeholder="Email" />
+                        </Form.Item>
                       </Field>
                     </Row>
                     <Row>

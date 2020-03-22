@@ -3,7 +3,12 @@ import { PageHeader, Input as I, Table, Button, Checkbox } from "antd"
 import { Input, Form, FormikDebug, Select } from "formik-antd"
 import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { Formik } from "formik"
-import { getLocation, HighlightableRow, ErrorBanner } from "../utils"
+import {
+  getLocation,
+  HighlightableRow,
+  ErrorBanner,
+  getAddress,
+} from "../utils"
 import styled from "styled-components"
 import { useNavigate, Outlet } from "react-router-dom"
 import { useQuery } from "react-query"
@@ -35,11 +40,14 @@ export function Search() {
                     name="address"
                     placeholder="Adresse Einsatzort"
                     style={{ width: "200px" }}
+                    disabled={true}
                     suffix={
                       <AimOutlined
                         onClick={async () => {
                           try {
-                            var location = await getLocation()
+                            const location = await getLocation()
+                            const address = await getAddress(location)
+                            f.setFieldValue("address", address)
                             f.setFieldValue("location", location)
                           } catch (E) {}
                         }}

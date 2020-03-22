@@ -69,8 +69,9 @@ namespace MyContribution.Backend
         public Guid[] Fields { get; set; }
         public Guid[] Skills { get; set; }
         public char Gender { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public int? Age { get; set; }
         public string Phone { get; set; }
+        [Required, EmailAddress]
         public string Email { get; set; }
         public string LastWorked { get; set; }
         public bool CoronaPassed { get; set; }
@@ -81,7 +82,6 @@ namespace MyContribution.Backend
         /// Years of professional experience
         /// </summary>
         public int Experience { get; set; }
-        [Required]
         public int Radius { get; set; }
         public string Comment { get; set; }
     }
@@ -102,11 +102,10 @@ namespace MyContribution.Backend
         public List<Offer_Skill> Skills { get; set; }
         [Required]
         public char Gender { get; set; }
-        [Required]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string Experience { get; set; }
         public string Phone { get; set; }
-        [Required,EmailAddress]
+        [Required, EmailAddress]
         public string Email { get; set; }
         [Required]
         public string LastWorked { get; set; }
