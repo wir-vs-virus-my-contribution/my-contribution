@@ -108,6 +108,11 @@ namespace MyContribution
                             .RuleFor(v => v.Entfernung, f => f.Random.Decimal((decimal) 0.1, 100))
                             .RuleFor(v => v.Experience, f => "" + f.Random.Number(1, 30))
                             .RuleFor(v => v.AvailableFrom, f => "Vollzeit")
+                            .RuleFor(v => v.Address, f => "Nymphenburger Str. 12, 80636 München")
+                            .RuleFor(v => v.Comment, f => "Des isch voll geil hier")
+                            .RuleFor(v => v.Email, f => "peter.zwegatat@online.de")
+                            .RuleFor(v => v.Phone, f => "0157625344")
+                            .RuleFor(v => v.DateOfBirth, f => DateTime.Now)
                             .Generate(50);
 
                         foreach (Offer offer in offers)
