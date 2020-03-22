@@ -10,7 +10,7 @@ namespace MyContribution.Backend
     public class Search
     {
         public AddressRequest Address { get; set; }
-        public Guid SelectedField { get; set; }
+        //public Guid SelectedField { get; set; }
         public Guid[] Skills { get; set; }
     }
 
@@ -92,7 +92,7 @@ namespace MyContribution.Backend
         [HttpPost("search")]
         public async Task<ActionResult<List<Offer>>> Search(Search search)
         {
-            Guid selectedField = search.SelectedField;
+            //Guid selectedField = search.SelectedField;
             Guid[] skills = search.Skills;
 
             int start = 0;
@@ -101,8 +101,8 @@ namespace MyContribution.Backend
                 .Include(v => v.Fields)
                 .ThenInclude(v => v.Field)
                 .Include(v => v.Skills)
-                .ThenInclude(v => v.Skill)
-                .Where(v => v.Fields.Any(p => p.FieldId == selectedField));
+                .ThenInclude(v => v.Skill);
+                //.Where(v => v.Fields.Any(p => p.FieldId == selectedField));
             IQueryable<Offer> skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
             searchResultAll = searchResultAll.Where(v => v.Skills.All(p => skills.All(o => p.SkillId != o)));
             //searchResultAll = searchResultAll.Except(skillmatch);

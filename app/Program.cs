@@ -79,7 +79,18 @@ namespace MyContribution
 
                         Field[] fields = new[]
                         {
-                            new Field{ Id=Guid.NewGuid(), Description = "",Title ="Krankenhaus" },
+                            new Field{ Id=Guid.NewGuid(), Description = "",Title ="Krankenhaus",
+                                Skills = new[]
+                                {
+                                    new Skill{Id=Guid.NewGuid(),Title="Sanitäter"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Blut abnehmen"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Seelsorge"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Pflege"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Verwaltung"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Organisation"},
+                                    new Skill{Id=Guid.NewGuid(),Title="Gesundheitsamt"},
+                                }
+                            },
                             new Field{ Id=Guid.NewGuid(),Description = "",Title ="Pflege" },
                             new Field{ Id=Guid.NewGuid(),Description = "",Title ="Notdienst" },
                             new Field{ Id=Guid.NewGuid(),Description = "",Title ="Sonstiges" },
@@ -88,16 +99,16 @@ namespace MyContribution
                             new Field{ Id=Guid.NewGuid(),Description = "",Title ="Botendienst" },
                         };
 
-                        Skill[] skills = new[]
-                        {
-                            new Skill{Id=Guid.NewGuid(),Title="Sanitäter"},
-                            new Skill{Id=Guid.NewGuid(),Title="Blut abnehmen"},
-                            new Skill{Id=Guid.NewGuid(),Title="Seelsorge"},
-                            new Skill{Id=Guid.NewGuid(),Title="Pflege"},
-                            new Skill{Id=Guid.NewGuid(),Title="Verwaltung"},
-                            new Skill{Id=new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d"),Title="Organisation"},
-                            new Skill{Id=Guid.NewGuid(),Title="Gesundheitsamt"},
-                        };
+                        //Skill[] skills = new[]
+                        //{
+                        //    new Skill{Id=Guid.NewGuid(),Title="Sanitäter"},
+                        //    new Skill{Id=Guid.NewGuid(),Title="Blut abnehmen"},
+                        //    new Skill{Id=Guid.NewGuid(),Title="Seelsorge"},
+                        //    new Skill{Id=Guid.NewGuid(),Title="Pflege"},
+                        //    new Skill{Id=Guid.NewGuid(),Title="Verwaltung"},
+                        //    new Skill{Id=new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d"),Title="Organisation"},
+                        //    new Skill{Id=Guid.NewGuid(),Title="Gesundheitsamt"},
+                        //};
 
                         Faker faker = new Faker();
                         List<Offer> offers = new Faker<Offer>()
@@ -113,15 +124,15 @@ namespace MyContribution
                             .RuleFor(v => v.Email, f => "peter.zwegatat@online.de")
                             .RuleFor(v => v.Phone, f => "0157625344")
                             .RuleFor(v => v.DateOfBirth, f => DateTime.Now)
-                            .Generate(1);
+                            .Generate(30);
 
                         foreach (Offer offer in offers)
                         {
-                            offer.Skills = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Skill() { OfferId = offer.Id, SkillId = faker.PickRandom(skills).Id }).Distinct().ToList();
+                            offer.Skills = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Skill() { OfferId = offer.Id, SkillId = faker.PickRandom(fields[0].Skills).Id }).Distinct().ToList();
                             offer.Fields = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Field() { OfferId = offer.Id, FieldId = faker.PickRandom(fields).Id }).Distinct().ToList();
                         }
 
-                        db.Skills.AddRange(skills);
+                        //db.Skills.AddRange(skills);
                         db.Fields.AddRange(fields);
 
                         db.SaveChanges();
