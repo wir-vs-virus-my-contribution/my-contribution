@@ -4,7 +4,7 @@ using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MyContribution.Contacts
+namespace MyContribution.Backend
 {
     [ODataRoutePrefix("Contacts")]
     [ApiVersion("1.0")]
@@ -19,14 +19,14 @@ namespace MyContribution.Contacts
 
         [ODataRoute("{key}")]
         [EnableQuery]
-        public SingleResult<Contact> Get(Guid key)
+        public SingleResult<DataTypes> Get(Guid key)
         {
-            return new SingleResult<Contact>(ctx.Contacts.Where(v => v.Id == key));
+            return new SingleResult<DataTypes>(ctx.Contacts.Where(v => v.Id == key));
         }
 
         [ODataRoute]
         [EnableQuery]
-        public IQueryable<Contact> Get()
+        public IQueryable<DataTypes> Get()
         {
             return ctx.Contacts;
         }

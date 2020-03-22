@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace MyContribution.Contacts
+namespace MyContribution.Backend
 {
-    public class Contact
+    public class DataTypes
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

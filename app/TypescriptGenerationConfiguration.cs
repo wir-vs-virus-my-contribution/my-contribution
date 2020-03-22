@@ -1,5 +1,5 @@
 using System;
-using MyContribution.Contacts;
+using MyContribution.Backend;
 using Reinforced.Typings.Ast.TypeNames;
 using Reinforced.Typings.Fluent;
 

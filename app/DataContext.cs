@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MyContribution.Contacts;
+using MyContribution.Backend;
 
 namespace MyContribution
 {
@@ -19,7 +19,7 @@ namespace MyContribution
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<DataTypes> Contacts { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Offer_Field> Offer_Field { get; set; }
