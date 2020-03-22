@@ -1,5 +1,5 @@
 import * as React from "react"
-import { PageHeader, Input as I, Table, Button } from "antd"
+import { PageHeader, Input as I, Table, Button, Checkbox } from "antd"
 import { Input, Form, FormikDebug, Select } from "formik-antd"
 import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { Formik } from "formik"
@@ -7,6 +7,7 @@ import { getLocation, HighlightableRow } from "../utils"
 import styled from "styled-components"
 import { useNavigate, Outlet } from "react-router-dom"
 import { useQuery } from "react-query"
+import { Offer } from "../models/helpers/Offer"
 
 export function Search() {
   const navigate = useNavigate()
@@ -24,7 +25,6 @@ export function Search() {
   // skill 1b02ca8b-9858-426c-8c7c-0d88cd2bb94d
   return (
     <Page>
-      <pre>{JSON.stringify({ status, data, error }, null, 4)}</pre>
       <PageHeader title="Suche">
         <Formik initialValues={{}} onSubmit={() => {}}>
           {f => (
@@ -87,7 +87,7 @@ export function Search() {
         </Formik>
 
         <div>
-          <Table
+          <Table<Offer>
             style={{ marginTop: 24 }}
             bordered={false}
             indentSize={0}
@@ -133,17 +133,39 @@ export function Search() {
             }
             columns={[
               { dataIndex: "name", title: "Name" },
-              { dataIndex: "distance", title: "Entfernung" },
-              { dataIndex: "profession", title: "Beruf" },
               {
-                render: (row, record) => (
-                  <div>{JSON.stringify(record.skills)}</div>
-                ),
-                title: "Fähigktein",
+                render: (v, r) => <div>{r.entfernung.toFixed(2)} km</div>,
+                title: "Entfernung",
               },
-              { dataIndex: "experience", title: "Erfahrung" },
-              { dataIndex: "gender", title: "Geschlecht" },
-              { dataIndex: "age", title: "Alter" },
+              {
+                render: (v, r) => (
+                  <span>
+                    {r.fields
+                      ? r.fields.map(v => v.field.title).join(", ")
+                      : "n/a"}
+                  </span>
+                ),
+                title: "Beruf",
+              },
+              {
+                render: (v, r) => (
+                  <span>
+                    {r.skills
+                      ? r.skills.map(v => v.skill.title).join(", ")
+                      : "n/a"}
+                  </span>
+                ),
+                title: "Fähigkeiten",
+              },
+              {
+                render: (v, r) => (
+                  <Checkbox checked={r.coronaPassed}></Checkbox>
+                ),
+                title: "Imun",
+              },
+              { render: (v, r) => r.experience, title: "Erfahrung" },
+              { render: (v, r) => r.gender, title: "Geschlecht" },
+              { render: (v, r) => "30", title: "Alter" },
               { dataIndex: "availability", title: "Verfügbarkeit" },
               {
                 render: () => <Button type="link">Details</Button>,

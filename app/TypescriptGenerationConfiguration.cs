@@ -35,6 +35,18 @@ namespace MyContribution
 
             builder.ExportAsInterface<Offer>()
                 .WithDefaults();
+
+            builder.ExportAsInterface<Offer_Field>()
+                .WithDefaults();
+
+            builder.ExportAsInterface<Field>()
+                .WithDefaults();
+
+            builder.ExportAsInterface<Skill>()
+                .WithDefaults();
+
+            builder.ExportAsInterface<Offer_Skill>()
+                .WithDefaults();
         }
     }
 }

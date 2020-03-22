@@ -79,37 +79,36 @@ namespace MyContribution
 
                         Field[] fields = new[]
                         {
-                            new Field{ Id=Guid.NewGuid(), Description = "",Title ="" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
-                            new Field{ Id=new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),Description = "",Title ="" },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="" },
+                            new Field{ Id=Guid.NewGuid(), Description = "",Title ="Krankenhaus" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Pflege" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Notdienst" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Sonstiges" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Seelsorge" },
+                            new Field{ Id=new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),Description = "",Title ="Praxis" },
+                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Botendienst" },
                         };
 
                         Skill[] skills = new[]
                         {
-                            new Skill{Id=Guid.NewGuid(),Title=""},
-                            new Skill{Id=Guid.NewGuid(),Title=""},
-                            new Skill{Id=Guid.NewGuid(),Title=""},
-                            new Skill{Id=Guid.NewGuid(),Title=""},
-                            new Skill{Id=Guid.NewGuid(),Title=""},
-                            new Skill{Id=new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d"),Title=""},
-                            new Skill{Id=Guid.NewGuid(),Title=""},
+                            new Skill{Id=Guid.NewGuid(),Title="Sanitäter"},
+                            new Skill{Id=Guid.NewGuid(),Title="Blut abnehmen"},
+                            new Skill{Id=Guid.NewGuid(),Title="Seelsorge"},
+                            new Skill{Id=Guid.NewGuid(),Title="Pflege"},
+                            new Skill{Id=Guid.NewGuid(),Title="Verwaltung"},
+                            new Skill{Id=new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d"),Title="Organisation"},
+                            new Skill{Id=Guid.NewGuid(),Title="Gesundheitsamt"},
                         };
 
-                        //var fields = new[] { "Krankenhaus", "Pflege", "Botendienste", "Seelsorge", "Nichts Spezielles" };
-                        //var skills = new[] { "Blut", "banana", "orange", "strawberry", "kiwi" };
                         Faker faker = new Faker();
                         List<Offer> offers = new Faker<Offer>()
                             .RuleFor(v => v.Id, f => Guid.NewGuid())
                             .RuleFor(v => v.Name, f => f.Person.FullName)
                             .RuleFor(v => v.Gender, f => f.PickRandom(gender))
-                            //.RuleFor(v => v.Fields, f => Enumerable.Range(1, f.Random.Int(1, 3)).Select(x => new Offer_Field() { FieldId = f.PickRandom(fields).Id }).ToList())
+                            .RuleFor(v => v.CoronaPassed, f => f.Random.Bool())
                             .RuleFor(v => v.Entfernung, f => f.Random.Decimal((decimal) 0.1, 100))
-                              //.RuleFor(v => v.Skills, f => Enumerable.Range(1, f.Random.Int(1, 3)).Select(x => new Offer_Skill() { SkillId = f.PickRandom(skills).Id }).ToList())
-                            .Generate(1000);
+                            .RuleFor(v => v.Experience, f => "" + f.Random.Number(1, 30))
+                            .RuleFor(v => v.AvailableFrom, f => "Vollzeit")
+                            .Generate(50);
 
                         foreach (Offer offer in offers)
                         {
