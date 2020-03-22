@@ -59,6 +59,31 @@ namespace MyContribution.Backend
             return Created("odata/Contacts", offer);
         }
 
+        [HttpPost("edit")]
+        public async Task<ActionResult<Offer>> Edit(OfferRequest request)
+        {
+            Guid offerId = request.Id;
+            Offer offer = ctx.Offers.Find(offerId);
+            offer.Name = request.Name;
+            offer.Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v }).ToList();
+            offer.Skills = request.Skills.Select(v => new Offer_Skill { OfferId = offerId, SkillId = v }).ToList();   //Kann null sein!!
+            offer.Gender = request.Gender;
+            offer.DateOfBirth = request.Age != null ? DateTime.UtcNow.AddYears(-request.Age.Value) : null as DateTime?;
+            offer.Phone = request.Phone;
+            offer.Email = request.Email;
+            offer.LastWorked = request.LastWorked;
+            offer.AvailableFrom = request.AvailableFrom;
+            offer.CoronaPassed = request.CoronaPassed;
+            offer.Address = request.Address;
+            offer.Radius = request.Radius;
+            offer.Comment = request.Comment;
+            offer.Entfernung = new Random().Next(1, 100);
+
+            await ctx.SaveChangesAsync();
+
+            return Ok(offer);
+        }
+
         [HttpPost("search")]
         public async Task<ActionResult<List<Offer>>> Search(Search search)
         {

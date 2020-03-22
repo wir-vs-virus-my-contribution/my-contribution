@@ -64,6 +64,7 @@ namespace MyContribution.Backend
 
     public class OfferRequest
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         [Required]
         public Guid[] Fields { get; set; }
