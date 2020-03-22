@@ -10,6 +10,7 @@ import {
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { LandingPage } from "./landing-page/landig-page"
 import { RegisterView } from "./registration"
+import { EditView } from "./edit"
 import { Search } from "./search"
 import { Detail } from "./search/detail"
 
@@ -83,6 +84,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/register" element={<RegisterView />} />
+              <Route path="/edit/:id" element={<EditView />} />
               <Route path="/search" element={<Search />}>
                 <Route path=":id" element={<Detail />}></Route>
               </Route>

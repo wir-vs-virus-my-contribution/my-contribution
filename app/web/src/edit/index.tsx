@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Steps, Button, notification, Card } from "antd"
+import { Steps, Button, notification, Card, Modal, Alert } from "antd"
 import {
   Checkbox,
   Select,
@@ -18,8 +18,9 @@ import { OfferRequest } from "../models/helpers/OfferRequest"
 import { Offer } from "../models/helpers/Offer"
 import { useQuery } from "react-query"
 import { useParams } from "react-router"
+import { getLocation, getAddress } from "../utils"
 
-const { Step } = Steps
+const labelCol = { xs: 5 }
 
 export function EditView() {
   const [current, setCurrent] = React.useState(0)
@@ -29,6 +30,8 @@ export function EditView() {
   const { data, error } = useQuery(id, async () => {
     const response = await fetch(`/api/offer/${id}`)
     const data = await response.json()
+    console.log(data)
+    console.log(response)
     return data
   })
 
@@ -46,217 +49,194 @@ export function EditView() {
           })
           if (response.ok) {
             const data = (await response.json()) as Offer
-            setShowSuccess(data)
+            //setShowSuccess(data)
+            Modal.success({
+              title: "Danke für deine Teilnahme!",
+              content: (
+                <div>
+                  Dein Profil ist über folgenden Link erreichbar. Bitte teile
+                  diesen Link nicht mit anderen.
+                </div>
+              ),
+              okButtonProps: { type: "link" },
+              okText: "Zum Profil",
+              onOk: () => navigate(`/edit/${data.id}`),
+            })
+          } else {
+            const text = await response.text()
+            notification.error({
+              description: text,
+              message: response.statusText,
+            })
           }
         }}
       >
         {f => (
           <Form>
             <div>
-              <Steps
-                type="navigation"
-                size="small"
-                className="site-navigation-steps"
-                current={current}
-                onChange={current => setCurrent(current)}
-              >
-                <Step title="Qualifikationen">Step 1</Step>
-                <Step title="Einsatzort">Step 2</Step>
-                <Step title="Kontakt" />
-              </Steps>
-              {current === 0 && (
-                <Content>
-                  <div>
-                    <Row>
-                      <Label>
-                        In welchen Bereich kannst du Unterstützung anbieten?
+              <Content>
+                <div>
+                  <Row>
+                    <Label style={{ fontSize: "1rem", fontWeight: "bold" }}>
+                      Qualifikation
+                    </Label>
+                    <Checkbox.Group
+                      name="domains"
+                      options={[
+                        { label: "Krankenhaus", value: "1" },
+                        { label: "Pflege", value: "2" },
+                        { label: "Botendienste", value: "3" },
+                        { label: "Seelsorge", value: "4" },
+                        { label: "Sonstige", value: "5" },
+                      ]}
+                    />
+                  </Row>
+                  <Row>
+                    <Label>Welche Qualifikationen hast du?</Label>
+                    <Select
+                      size="large"
+                      name="qualifications"
+                      style={{ width: "100%" }}
+                      placeholder="Mehrfachauswahl"
+                      mode="multiple"
+                    >
+                      <Select.Option value={1}>Santitäter</Select.Option>
+                      <Select.Option value={2}>
+                        Gesundheits & Krankenpfleger
+                        </Select.Option>
+                      <Select.Option value={3}>
+                        Gesundheits- & Kinderkrankenpfleger 3
+                        </Select.Option>
+                      <Select.Option value={4}>
+                        Fachkrankenschwester
+                        </Select.Option>
+                      <Select.Option value={5}>Altenpfleger</Select.Option>
+                      <Select.Option value={6}>
+                        Pflegefachhelfer
+                        </Select.Option>
+                    </Select>
+                  </Row>
+                  <Row>
+                    <Label>
+                      Wieviele Jahre Berufserfahrung hast du insgesamt?
                       </Label>
-                      <Checkbox.Group
-                        name="domains"
-                        options={[
-                          { label: "Krankenhaus", value: "1" },
-                          { label: "Pflege", value: "2" },
-                          { label: "Botendienste", value: "3" },
-                          { label: "Seelsorge", value: "4" },
-                          { label: "Sonstige", value: "5" },
-                        ]}
+                    <InputNumber
+                      size="large"
+                      style={{ width: "400px" }}
+                      min={-1}
+                      name="experience"
+                    />
+                  </Row>
+                </div>
+                <div>
+                  <Label style={{ fontSize: "1rem", fontWeight: "bold" }}>
+                    Einsatzbereich
+                    </Label>
+                  <Row>
+                    <Label>Wie lautet deine ungefähre Adresse?</Label>
+                    <Input
+                      name="address"
+                      suffix={
+                        <Button
+                          onClick={async () => {
+                            try {
+                              const location = await getLocation()
+                              const address = await getAddress(location)
+
+                              f.setFieldValue("address", address)
+                              f.setFieldValue("location", location)
+                            } catch { }
+                          }}
+                        >
+                          <AimOutlined />
+                        </Button>
+                      }
+                    />
+                  </Row>
+                  <Row>
+                    <Label>
+                      In welchem Umkreis (km) bist du einsatzbereit?
+                      </Label>
+                    <div style={{ display: "flex" }}>
+                      <Slider
+                        name="radius"
+                        style={{ flex: 1, marginRight: 15 }}
                       />
-                    </Row>
-                    <Row>
-                      <Label>Welche Qualifikationen hast du?</Label>
-                      <Select
-                        size="large"
-                        name="qualifications"
-                        style={{ width: "100%" }}
-                        placeholder="Mehrfachauswahl"
-                        mode="multiple"
+                      <InputNumber
+                        name="radius"
+                        formatter={value => `${value} km`}
+                      />
+                    </div>
+                  </Row>
+                </div>
+                <div>
+                  <Row>
+                    <Label style={{ fontSize: "1rem", fontWeight: "bold" }}>
+                      Kontaktdaten
+                    </Label>
+                    <Field>
+                      <Form.Item
+                        labelCol={labelCol}
+                        name="gender"
+                        label="Geschlecht"
+                        required={true}
                       >
-                        <Select.Option value={1}>Santitäter</Select.Option>
-                        <Select.Option value={2}>
-                          Gesundheits & Krankenpfleger
-                        </Select.Option>
-                        <Select.Option value={3}>
-                          Gesundheits- & Kinderkrankenpfleger 3
-                        </Select.Option>
-                        <Select.Option value={4}>
-                          Fachkrankenschwester
-                        </Select.Option>
-                        <Select.Option value={5}>Altenpfleger</Select.Option>
-                        <Select.Option value={6}>
-                          Pflegefachhelfer
-                        </Select.Option>
-                      </Select>
-                    </Row>
-                    <Row>
-                      <Label>
-                        Wieviele Jahre Beruferfahrung hast du insgesamt?
-                      </Label>
-                      <InputNumber size="large" name="experience" />
-                    </Row>
-                  </div>
-                  <ButtonRow>
-                    <Button size="large" onClick={() => navigate("/")}>
-                      Zurück
-                    </Button>
-                    <Button
-                      type="primary"
-                      size="large"
-                      onClick={() => setCurrent(1)}
-                    >
-                      Weiter
-                    </Button>
-                  </ButtonRow>
-                </Content>
-              )}
-              {current === 1 && (
-                <Content>
-                  <div>
-                    <Row>
-                      <Label>Wie lautet deine ungefähre Adresse?</Label>
-                      <Input
-                        name="adress"
-                        suffix={
-                          <Button
-                            onClick={() => {
-                              if (navigator.geolocation) {
-                                navigator.geolocation.getCurrentPosition(
-                                  location => {
-                                    notification.info({
-                                      message:
-                                        "Latitude: " +
-                                        location.coords.latitude +
-                                        "<br>Longitude: " +
-                                        location.coords.longitude +
-                                        " " +
-                                        JSON.stringify(location),
-                                    })
-                                  },
-                                )
-                              } else {
-                                notification.error({
-                                  message:
-                                    "Geolocation is not supported by this browser.",
-                                })
-                              }
-                            }}
-                          >
-                            <AimOutlined />
-                          </Button>
-                        }
-                      />
-                    </Row>
-                    <Row>
-                      <Label>
-                        In welchem Umkreis (km) bist du einsatzbereit?
-                      </Label>
-                      <div style={{ display: "flex" }}>
-                        <Slider
-                          name="radius"
-                          style={{ flex: 1, marginRight: 15 }}
-                        />
-                        <InputNumber
-                          name="radius"
-                          formatter={value => `${value} km`}
-                        />
-                      </div>
-                    </Row>
-                  </div>
-                  <ButtonRow>
-                    <Button size="large" onClick={() => setCurrent(0)}>
-                      Zurück
-                    </Button>
-                    <Button
-                      type="primary"
-                      size="large"
-                      onClick={() => setCurrent(2)}
-                    >
-                      Weiter
-                    </Button>
-                  </ButtonRow>
-                </Content>
-              )}
-              {current === 2 && (
-                <Content>
-                  <div>
-                    <Row>
-                      <Label>Wir finden eine Einsatzmöglichkeit für Dich</Label>
-                      <Label style={{ fontSize: "1rem" }}>
-                        Bitte hinterlasse uns Deine Kontaktdaten, damit wir uns
-                        bei Dir melden können.
-                      </Label>
-                      <Field>
-                        <Radio.Group name="sex">
-                          <Radio name="sex" value="m">
+                        <Radio.Group name="gender">
+                          <Radio name="gender" value="m">
                             M
-                          </Radio>
-                          <Radio name="sex" value="f">
+                            </Radio>
+                          <Radio name="gender" value="f">
                             W
-                          </Radio>
-                          <Radio name="sex" value="d">
+                            </Radio>
+                          <Radio name="gender" value="d">
                             D
-                          </Radio>
+                            </Radio>
                         </Radio.Group>
-                      </Field>
-                      <Field>
-                        <Input name="firstName" placeholder="Vorname" />
-                      </Field>
-                      <Field>
-                        <Input name="lastName" placeholder="Nachname" />
-                      </Field>
-                      <Field>
-                        <Input name="Telefon" placeholder="Telefon" />
-                      </Field>
-                      <Field>
-                        <Input name="Email" placeholder="Email" />
-                      </Field>
-                    </Row>
-                    <Row>
-                      <Checkbox name="privacyThing">
-                        Ich erkläre hiermit meine Einwilligung in die
-                        Verarbeitung meiner Daten gemäß der
-                        datenschutzrechtlichen Einwilligungserklärung. Ich
-                        erkläre mich einverstanden, über What's App, per Telefon
-                        oder E-Mail kontaktiert zu werden. Mit der
-                        Kontaktaufnahme nehme ich die Datenschutzerklärung zur
-                        Kenntnis.
-                      </Checkbox>
-                    </Row>
-                  </div>
-                  <ButtonRow>
-                    <Button size="large" onClick={() => setCurrent(0)}>
-                      Zurück
+                      </Form.Item>
+                    </Field>
+                    <Field>
+                      <Form.Item name="nameLabel" label="Name" labelCol={labelCol}>
+                        <Input
+                          name="name"
+                          placeholder="Vorname Nachname"
+                        />
+                      </Form.Item>
+                    </Field>
+                    <Field>
+                      <Form.Item
+                        name="phone"
+                        label="Telefon"
+                        labelCol={labelCol}
+                      >
+                        <Input name="phone" placeholder="Telefon" />
+                      </Form.Item>
+                    </Field>
+                    <Field>
+                      <Form.Item
+                        name="email"
+                        required={true}
+                        label="Email"
+                        labelCol={labelCol}
+                      >
+                        <Input name="email" placeholder="Email" />
+                      </Form.Item>
+                    </Field>
+                  </Row>
+                </div>
+                <ButtonRow>
+                  <Button size="large" onClick={() => setCurrent(0)}>
+                    Abbrechen
                     </Button>
-                    <SubmitButton
-                      type="primary"
-                      size="large"
-                      onClick={() => f.submitForm()}
-                    >
-                      Absenden
+                  <SubmitButton
+                    type="primary"
+                    size="large"
+                    onClick={() => f.submitForm()}
+                  >
+                    Speichern
                       <SendOutlined />
-                    </SubmitButton>
-                  </ButtonRow>
-                </Content>
-              )}
+                  </SubmitButton>
+                </ButtonRow>
+              </Content>
             </div>
           </Form>
         )}
@@ -267,7 +247,7 @@ export function EditView() {
 
 const Content = styled.div`
   padding: 24px;
-  height: 550px;
+  height: 800px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
