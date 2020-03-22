@@ -16,33 +16,27 @@ import { useNavigate } from "react-router-dom"
 import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { OfferRequest } from "../models/helpers/OfferRequest"
 import { Offer } from "../models/helpers/Offer"
-import { Profile } from "./profile"
+import { useQuery } from "react-query"
+import { useParams } from "react-router"
 
 const { Step } = Steps
 
-export function RegisterView() {
+export function EditView() {
   const [current, setCurrent] = React.useState(0)
   const navigate = useNavigate()
+  const { id } = useParams()
   const [showSuccess, setShowSuccess] = React.useState<null | Offer>(null)
+  const { status, data, error } = useQuery(id, async () => {
+    const response = await fetch(`/api/offer/${id}`)
+    const data = await response.json()
+    return data
+  })
+
   return (
     <Card style={{ margin: 60, width: 700 }}>
       <Formik<OfferRequest>
-        initialValues={{
-          radius: 10,
-          gender: "f",
-          address: "dontcare",
-
-          availableFrom: "",
-          lastWorked: "",
-          skills: [],
-          comment: "",
-          coronaPassed: false,
-          dateOfBirth: new Date().toISOString(),
-          email: "example@email.com",
-          fields: [],
-          name: "name",
-          phone: "12345",
-        }}
+        initialValues={data}
+        enableReinitialize={true}
         onSubmit={async values => {
           notification.info({ message: "submitting" })
           const response = await fetch("/api/offer/edit?api-version=1.0", {
