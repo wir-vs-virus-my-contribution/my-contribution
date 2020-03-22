@@ -45,7 +45,7 @@ export function RegisterView() {
         }}
         onSubmit={async values => {
           notification.info({ message: "submitting" })
-          const response = await fetch("/api/contacts/createOffer", {
+          const response = await fetch("/api/offer/create?api-version=1.0", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(values),

@@ -8,7 +8,7 @@ export function Detail() {
   const { id } = useParams<{ id: string }>()
   const { data, status, error } = useQuery(
     id,
-    fetch(`/api/contacts/${id}`).then(v => v.json()),
+    fetch(`/api/offer/${id}`).then(v => v.json()),
   )
   const navigate = useNavigate()
 

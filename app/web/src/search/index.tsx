@@ -12,7 +12,7 @@ import { Offer } from "../models/helpers/Offer"
 export function Search() {
   const navigate = useNavigate()
   const { status, data, error } = useQuery("todos", () =>
-    fetch("/api/contacts/search", {
+    fetch("/api/offer/search", {
       method: "POST",
       body: JSON.stringify({
         selectedField: "3f9bfdd3-6f79-4301-aa26-dd6e3b92a420",

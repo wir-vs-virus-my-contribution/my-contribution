@@ -27,13 +27,13 @@ namespace MyContribution.Backend
         }
 
         [HttpGet("{key}")]
-        public async Task<DataTypes> Get(Guid key)
+        public async Task<Offer> Get(Guid key)
         {
-            return await ctx.Contacts.SingleAsync(v => v.Id == key);
+            return await ctx.Offers.SingleAsync(v => v.Id == key);
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<Offer>> CreateOffer(OfferRequest request)
+        public async Task<ActionResult<Offer>> Create(OfferRequest request)
         {
             Guid offerId = Guid.NewGuid();
             Offer offer = new Offer()
@@ -75,7 +75,7 @@ namespace MyContribution.Backend
                 .Where(v => v.Fields.Any(p => p.FieldId == selectedField));
             IQueryable<Offer> skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
             searchResultAll = searchResultAll.Except(skillmatch);
-            skillmatch = skillmatch.OrderBy(v => v.Entfernung - start); //Vorschreiben
+            skillmatch = skillmatch.OrderBy(v => v.Entfernung - start);
             searchResultAll = searchResultAll.OrderBy(v => v.Entfernung - start);
             List<Offer> resultList = await skillmatch.Take(10).ToListAsync();
             resultList.AddRange(await searchResultAll.Take(10).ToListAsync());

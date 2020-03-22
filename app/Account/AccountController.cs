@@ -19,9 +19,9 @@ namespace MyContribution.Backend
         }
 
         [HttpGet("{key}")]
-        public async Task<DataTypes> Get(Guid key)
+        public async Task<Account> Get(Guid key)
         {
-            return await ctx.Contacts.SingleAsync(v => v.Id == key);
+            return await ctx.Accounts.SingleAsync(v => v.Id == key);
         }
 
         [HttpPost("create")]
