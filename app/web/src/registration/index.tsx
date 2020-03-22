@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Steps, Button, notification, Card } from "antd"
+import { Steps, Button, notification, Card, Modal, Alert } from "antd"
 import {
   Checkbox,
   Select,
@@ -12,7 +12,7 @@ import {
 } from "formik-antd"
 import { Formik } from "formik"
 import styled from "styled-components"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { OfferRequest } from "../models/helpers/OfferRequest"
 import { Offer } from "../models/helpers/Offer"
@@ -24,9 +24,12 @@ const { Step } = Steps
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string()
-    .email()
-    .required("Required"),
+    .email("Sieht nicht nach einer gültigen Email Addresse aus")
+    .required("Email ist ein Pflichtfeld"),
+  gender: Yup.string().required("Pflichtfeld"),
 })
+
+const labelCol = { xs: 5 }
 
 export function RegisterView() {
   const [current, setCurrent] = React.useState(0)
@@ -54,7 +57,6 @@ export function RegisterView() {
           experience: 0,
         }}
         onSubmit={async values => {
-          notification.info({ message: "submitting" })
           const response = await fetch("/api/offer/create?api-version=1.0", {
             method: "POST",
             headers: { "content-type": "application/json" },
@@ -62,7 +64,19 @@ export function RegisterView() {
           })
           if (response.ok) {
             const data = (await response.json()) as Offer
-            setShowSuccess(data)
+
+            Modal.success({
+              title: "Danke für deine Teilnahme!",
+              content: (
+                <div>
+                  Dein Profil ist über folgenden Link erreichbar. Bitte teile
+                  diesen Link nicht mit anderen.
+                </div>
+              ),
+              okButtonProps: { type: "link" },
+              okText: "Zum Profil",
+              onOk: () => navigate(`/edit/${data.id}`),
+            })
           } else {
             const text = await response.text()
             notification.error({
@@ -219,43 +233,60 @@ export function RegisterView() {
                         bei Dir melden können.
                       </Label>
                       <Field>
-                        <Radio.Group name="sex">
-                          <Radio name="sex" value="m">
-                            M
-                          </Radio>
-                          <Radio name="sex" value="f">
-                            W
-                          </Radio>
-                          <Radio name="sex" value="d">
-                            D
-                          </Radio>
-                        </Radio.Group>
+                        <Form.Item
+                          labelCol={labelCol}
+                          name="gender"
+                          label="Geschlecht"
+                          required={true}
+                        >
+                          <Radio.Group name="gender">
+                            <Radio name="gender" value="m">
+                              M
+                            </Radio>
+                            <Radio name="gender" value="f">
+                              W
+                            </Radio>
+                            <Radio name="gender" value="d">
+                              D
+                            </Radio>
+                          </Radio.Group>
+                        </Form.Item>
                       </Field>
                       <Field>
-                        <Input name="firstName" placeholder="Vorname" />
+                        <Form.Item name="name" label="Name" labelCol={labelCol}>
+                          <Input
+                            name="firstName"
+                            placeholder="Vorname Nachname"
+                          />
+                        </Form.Item>
                       </Field>
                       <Field>
-                        <Input name="lastName" placeholder="Nachname" />
+                        <Form.Item
+                          name="phone"
+                          label="Telefon"
+                          labelCol={labelCol}
+                        >
+                          <Input name="phone" placeholder="Telefon" />
+                        </Form.Item>
                       </Field>
                       <Field>
-                        <Input name="phone" placeholder="Telefon" />
-                      </Field>
-                      <Field>
-                        <Form.Item name="email">
+                        <Form.Item
+                          name="email"
+                          required={true}
+                          label="Email"
+                          labelCol={labelCol}
+                        >
                           <Input name="email" placeholder="Email" />
                         </Form.Item>
                       </Field>
                     </Row>
                     <Row>
-                      <Checkbox name="privacyThing">
-                        Ich erkläre hiermit meine Einwilligung in die
-                        Verarbeitung meiner Daten gemäß der
-                        datenschutzrechtlichen Einwilligungserklärung. Ich
-                        erkläre mich einverstanden, über What's App, per Telefon
-                        oder E-Mail kontaktiert zu werden. Mit der
-                        Kontaktaufnahme nehme ich die Datenschutzerklärung zur
-                        Kenntnis.
-                      </Checkbox>
+                      Mit Betätigung des "Absende" Knopfes erkläre ich meine
+                      Einwilligung in die Verarbeitung meiner Daten gemäß der
+                      datenschutzrechtlichen Einwilligungserklärung. Ich erkläre
+                      mich einverstanden, per Telefon oder E-Mail kontaktiert zu
+                      werden. Mit der Kontaktaufnahme nehme ich die
+                      Datenschutzerklärung zur Kenntnis.
                     </Row>
                   </div>
                   <ButtonRow>
@@ -277,7 +308,6 @@ export function RegisterView() {
           </Form>
         )}
       </Formik>
-      {showSuccess && <Profile offer={showSuccess} />}
     </Card>
   )
 }

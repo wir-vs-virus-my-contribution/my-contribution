@@ -51,11 +51,10 @@ namespace MyContribution.Backend
                 Address = request.Address,
                 Radius = request.Radius,
                 Comment = request.Comment,
-                Entfernung = new Random().Next(1, 100)
+                Distance = new Random().Next(1, 100)
             };
             ctx.Offers.Add(offer);
             await ctx.SaveChangesAsync();
-
             return Created("odata/Contacts", offer);
         }
 
@@ -76,8 +75,8 @@ namespace MyContribution.Backend
             IQueryable<Offer> skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
             searchResultAll = searchResultAll.Where(v => v.Skills.All(p => skills.All(o => p.SkillId != o)));
             //searchResultAll = searchResultAll.Except(skillmatch);
-            skillmatch = skillmatch.OrderBy(v => v.Entfernung - start);
-            searchResultAll = searchResultAll.OrderBy(v => v.Entfernung - start);
+            skillmatch = skillmatch.OrderBy(v => v.Distance - start);
+            searchResultAll = searchResultAll.OrderBy(v => v.Distance - start);
             List<Offer> resultList = await skillmatch.Take(10).ToListAsync();
             resultList.AddRange(await searchResultAll.Take(10).ToListAsync());
             return Ok(resultList);

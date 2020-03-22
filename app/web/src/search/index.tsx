@@ -116,7 +116,7 @@ export function Search() {
             columns={[
               { dataIndex: "name", title: "Name" },
               {
-                render: (v, r) => <div>{r.entfernung.toFixed(2)} km</div>,
+                render: (v, r) => <div>{r.distance.toFixed(2)} km</div>,
                 title: "Entfernung",
               },
               {

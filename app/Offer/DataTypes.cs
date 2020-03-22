@@ -117,7 +117,7 @@ namespace MyContribution.Backend
         [Required]
         public int Radius { get; set; }
         public string Comment { get; set; }
-        public decimal Entfernung { get; set; }
+        public decimal Distance { get; set; }
 
     }
     public class Offer_Field
