@@ -15,7 +15,7 @@ namespace MyContribution
                 .Substitute(typeof(Guid?), new RtSimpleTypeName("string|null"))
                 .Substitute(typeof(DateTime?), new RtSimpleTypeName("string|null"))
                 .Substitute(typeof(DateTime), new RtSimpleTypeName("string"))
-                .Substitute(typeof(int?), new RtSimpleTypeName("nuzmber|null"))
+                .Substitute(typeof(int?), new RtSimpleTypeName("number|null"))
                 .OverrideNamespace("helpers")
                 .AutoI(false);
         }
