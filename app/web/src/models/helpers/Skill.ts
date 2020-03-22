@@ -2,8 +2,12 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
+import { Field } from './Field';
+
 export interface Skill
 {
 	id: string;
 	title: string|null;
+	field: Field;
+	fieldId: string;
 }

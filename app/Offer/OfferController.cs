@@ -26,6 +26,12 @@ namespace MyContribution.Backend
             this.ctx = ctx;
         }
 
+        [HttpGet("fields")]
+        public async Task<IEnumerable<Field>> Fields()
+        {
+            return await ctx.Fields.Include(v => v.Skills).ToListAsync();
+        }
+
         [HttpGet("{key}")]
         public async Task<Offer> Get(Guid key)
         {

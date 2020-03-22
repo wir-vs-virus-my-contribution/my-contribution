@@ -26,7 +26,7 @@ export function EditView() {
   const navigate = useNavigate()
   const { id } = useParams()
   const [showSuccess, setShowSuccess] = React.useState<null | Offer>(null)
-  const { status, data, error } = useQuery(id, async () => {
+  const { data, error } = useQuery(id, async () => {
     const response = await fetch(`/api/offer/${id}`)
     const data = await response.json()
     return data

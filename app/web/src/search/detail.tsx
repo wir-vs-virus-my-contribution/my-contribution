@@ -9,12 +9,11 @@ import { MailOutlined } from "@ant-design/icons"
 
 export function Detail() {
   const { id } = useParams<{ id: string }>()
-  const { data, status, error } = useQuery(id, async () => {
+  const { data: offer, error } = useQuery(id, async () => {
     const response = await fetch(`/api/offer/${id}`)
     const data = (await response.json()) as Offer
     return data
   })
-  const offer: Offer | null = data ? data : null
   const navigate = useNavigate()
 
   return (

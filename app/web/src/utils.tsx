@@ -1,6 +1,8 @@
 import { notification, Alert } from "antd"
 import * as React from "react"
 import styled from "styled-components"
+import { Field } from "./models/helpers/Field"
+import { useQuery } from "react-query"
 
 export function ErrorBanner({ message }: { message: any }) {
   return (
@@ -13,6 +15,30 @@ export function ErrorBanner({ message }: { message: any }) {
 export interface Location {
   latitude: number
   longitude: number
+}
+
+export async function fetchJson(url: string) {
+  const response = await fetch(url)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error(response.statusText)
+  }
+}
+
+export function info(message: string) {
+  notification.info({ message })
+}
+
+export function useFields() {
+  const query = useQuery("fields", () => getFields())
+  return query
+}
+
+export async function getFields() {
+  const response = (await fetchJson("/api/offer/fields")) as Field[]
+  return response
 }
 
 export async function getAddress(location: Location): Promise<string> {
