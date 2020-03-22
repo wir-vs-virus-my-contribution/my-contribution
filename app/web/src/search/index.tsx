@@ -1,13 +1,6 @@
 import * as React from "react"
-import {
-  PageHeader,
-  Input as I,
-  Table,
-  Button,
-  Checkbox,
-  notification,
-} from "antd"
-import { Input, Form, FormikDebug, Select } from "formik-antd"
+import { PageHeader, Input as I, Table, Button, Checkbox } from "antd"
+import { Input, Form, Select } from "formik-antd"
 import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { Formik } from "formik"
 import {
@@ -32,19 +25,46 @@ export function Search() {
 
   const navigate = useNavigate()
   const { data: fields } = useFields()
+  const skills = React.useMemo(() => {
+    info("memo")
+    if (fields) {
+      console.log(
+        selectedField,
+        fields.flatMap(v => v.skills),
+      )
+
+      const skills = fields
+        .flatMap(v => v.skills)
+        .filter(v => v.fieldId == selectedField)
+
+      info("" + skills.length)
+      return skills
+    } else {
+      return null
+    }
+  }, [selectedField, fields])
   const { data, error } = useQuery(
     ["offer", { selectedField, skills: selectedSkills }],
-    keys =>
-      fetch("/api/offer/search", {
+    async keys => {
+      const response = await fetch("/api/offer/search", {
         method: "POST",
         body: JSON.stringify(keys),
         headers: { "content-type": "application/json" },
-      }).then(v => v.json()),
+      })
+      if (response.ok) {
+        const data = (await response.json()) as Offer[]
+        return data
+      } else {
+        throw new Error(response.statusText)
+      }
+    },
+    { retry: 1 },
   )
 
   return (
     <Page>
       <ErrorBanner message={error} />
+
       <PageHeader title="Suche">
         <Formik initialValues={{}} onSubmit={() => {}}>
           {f => (
@@ -75,6 +95,7 @@ export function Search() {
                     style={{ width: "150px" }}
                     onChange={(value, option) => {
                       info(value)
+                      setSelectedField(value)
                     }}
                   >
                     {fields
@@ -84,41 +105,26 @@ export function Search() {
                           </Select.Option>
                         ))
                       : []}
-                    {/* <Select.Option key={1} value="1">
-                      Krankenhaus
-                    </Select.Option>
-                    <Select.Option key={2} value="2">
-                      Pflege
-                    </Select.Option>
-                    <Select.Option key={3} value="3">
-                      Botendienst
-                    </Select.Option>
-                    <Select.Option key={4} value="4">
-                      Sonstiges
-                    </Select.Option> */}
                   </Select>
                   <Select
                     mode="multiple"
                     placeholder="Fähigkeiten"
                     name="skills"
-                    style={{ width: "200px" }}
+                    style={{ width: "400px" }}
                   >
-                    <Select.Option key={1} value="1">
-                      Sanitäter
-                    </Select.Option>
-                    <Select.Option key={2} value="2">
-                      Krankenpfleger
-                    </Select.Option>
-                    <Select.Option key={3} value="3">
-                      Seelsorger
-                    </Select.Option>
+                    {skills
+                      ? skills.map(v => (
+                          <Select.Option key={v.id} value={v.id}>
+                            {v.title}
+                          </Select.Option>
+                        ))
+                      : []}
                   </Select>
                 </I.Group>
               </SearchBar>
             </Form>
           )}
         </Formik>
-
         <div>
           <Table<Offer>
             style={{ marginTop: 24 }}
@@ -136,7 +142,7 @@ export function Search() {
             })}
             rowKey="id"
             size="small"
-            loading={{ spinning: !Boolean(data), delay: 200 }}
+            loading={{ spinning: !Boolean(data) && !error, delay: 200 }}
             dataSource={data ? data : []}
             columns={[
               { dataIndex: "name", title: "Name" },
