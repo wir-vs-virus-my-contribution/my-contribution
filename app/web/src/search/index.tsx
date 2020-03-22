@@ -1,5 +1,12 @@
 import * as React from "react"
-import { PageHeader, Input as I, Table, Button, Checkbox } from "antd"
+import {
+  PageHeader,
+  Input as I,
+  Table,
+  Button,
+  Checkbox,
+  notification,
+} from "antd"
 import { Input, Form, FormikDebug, Select } from "formik-antd"
 import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { Formik } from "formik"
@@ -8,23 +15,31 @@ import {
   HighlightableRow,
   ErrorBanner,
   getAddress,
+  useFields,
+  info,
 } from "../utils"
 import styled from "styled-components"
 import { useNavigate, Outlet } from "react-router-dom"
 import { useQuery } from "react-query"
 import { Offer } from "../models/helpers/Offer"
+import { Field } from "../models/helpers/Field"
 
 export function Search() {
+  const [selectedField, setSelectedField] = React.useState<string | null>(null)
+  const [selectedSkills, setSelectedSkills] = React.useState<string[] | null>(
+    null,
+  )
+
   const navigate = useNavigate()
-  const { status, data, error } = useQuery("todos", () =>
-    fetch("/api/offer/search", {
-      method: "POST",
-      body: JSON.stringify({
-        selectedField: "3f9bfdd3-6f79-4301-aa26-dd6e3b92a420",
-        skills: ["1b02ca8b-9858-426c-8c7c-0d88cd2bb94d"],
-      }),
-      headers: { "content-type": "application/json" },
-    }).then(v => v.json()),
+  const { data: fields } = useFields()
+  const { data, error } = useQuery(
+    ["offer", { selectedField, skills: selectedSkills }],
+    keys =>
+      fetch("/api/offer/search", {
+        method: "POST",
+        body: JSON.stringify(keys),
+        headers: { "content-type": "application/json" },
+      }).then(v => v.json()),
   )
 
   return (
@@ -58,8 +73,18 @@ export function Search() {
                     placeholder="Bereich"
                     name="domain"
                     style={{ width: "150px" }}
+                    onChange={(value, option) => {
+                      info(value)
+                    }}
                   >
-                    <Select.Option key={1} value="1">
+                    {fields
+                      ? fields.map((v: Field) => (
+                          <Select.Option key={v.id} value={v.id}>
+                            {v.title}
+                          </Select.Option>
+                        ))
+                      : []}
+                    {/* <Select.Option key={1} value="1">
                       Krankenhaus
                     </Select.Option>
                     <Select.Option key={2} value="2">
@@ -70,7 +95,7 @@ export function Search() {
                     </Select.Option>
                     <Select.Option key={4} value="4">
                       Sonstiges
-                    </Select.Option>
+                    </Select.Option> */}
                   </Select>
                   <Select
                     mode="multiple"
@@ -111,12 +136,12 @@ export function Search() {
             })}
             rowKey="id"
             size="small"
-            loading={status === "loading"}
+            loading={{ spinning: !Boolean(data), delay: 200 }}
             dataSource={data ? data : []}
             columns={[
               { dataIndex: "name", title: "Name" },
               {
-                render: (v, r) => <div>{r.entfernung.toFixed(2)} km</div>,
+                render: (v, r) => <div>{r.distance.toFixed(2)} km</div>,
                 title: "Entfernung",
               },
               {

@@ -16,6 +16,7 @@ namespace MyContribution
                 .Substitute(typeof(DateTime?), new RtSimpleTypeName("string|null"))
                 .Substitute(typeof(DateTime), new RtSimpleTypeName("string"))
                 .Substitute(typeof(int?), new RtSimpleTypeName("number|null"))
+                .Substitute(typeof(bool?), new RtSimpleTypeName("boolean|null"))
                 .OverrideNamespace("helpers")
                 .AutoI(false);
         }

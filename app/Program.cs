@@ -105,7 +105,7 @@ namespace MyContribution
                             .RuleFor(v => v.Name, f => f.Person.FullName)
                             .RuleFor(v => v.Gender, f => f.PickRandom(gender))
                             .RuleFor(v => v.CoronaPassed, f => f.Random.Bool())
-                            .RuleFor(v => v.Entfernung, f => f.Random.Decimal((decimal) 0.1, 100))
+                            .RuleFor(v => v.Distance, f => f.Random.Decimal((decimal) 0.1, 100))
                             .RuleFor(v => v.Experience, f => "" + f.Random.Number(1, 30))
                             .RuleFor(v => v.AvailableFrom, f => "Vollzeit")
                             .RuleFor(v => v.Address, f => "Nymphenburger Str. 12, 80636 München")
@@ -113,7 +113,7 @@ namespace MyContribution
                             .RuleFor(v => v.Email, f => "peter.zwegatat@online.de")
                             .RuleFor(v => v.Phone, f => "0157625344")
                             .RuleFor(v => v.DateOfBirth, f => DateTime.Now)
-                            .Generate(50);
+                            .Generate(1);
 
                         foreach (Offer offer in offers)
                         {

@@ -8,7 +8,7 @@ export interface OfferRequest
 	fields: string[];
 	skills: string[];
 	gender: string;
-	age: nuzmber|null;
+	age: number|null;
 	phone: string|null;
 	email: string|null;
 	lastWorked: string|null;

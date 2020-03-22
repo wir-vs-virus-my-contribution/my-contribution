@@ -17,6 +17,8 @@ namespace MyContribution.Backend
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public Field Field { get; set; }
+        public Guid FieldId { get; set; }
 
     }
 
@@ -25,6 +27,7 @@ namespace MyContribution.Backend
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public ICollection<Skill> Skills { get; set; }
 
     }
     public class RelativeTime
@@ -118,7 +121,7 @@ namespace MyContribution.Backend
         [Required]
         public int Radius { get; set; }
         public string Comment { get; set; }
-        public decimal Entfernung { get; set; }
+        public decimal Distance { get; set; }
 
     }
     public class Offer_Field

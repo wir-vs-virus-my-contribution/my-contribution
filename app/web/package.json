@@ -30,6 +30,7 @@
     "format": "prettier --write src/**/*.tsx src/**/*.ts package.json"
   },
   "devDependencies": {
+    "@types/react-query": "0.3.9",
     "@types/yup": "0.26.33",
     "babel-plugin-import": "1.12.2",
     "customize-cra": "0.9.1",

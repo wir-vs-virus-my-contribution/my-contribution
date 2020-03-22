@@ -22,5 +22,5 @@ export interface Offer
 	address: string|null;
 	radius: number;
 	comment: string|null;
-	entfernung: number;
+	distance: number;
 }

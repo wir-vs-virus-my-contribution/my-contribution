@@ -1,6 +1,6 @@
 import * as React from "react"
 import "./App.css"
-import { Menu, Layout, Breadcrumb } from "antd"
+import { Menu, Layout, Breadcrumb, Alert } from "antd"
 import {
   UserOutlined,
   GithubOutlined,
@@ -18,6 +18,11 @@ const { Header, Footer, Sider, Content } = Layout
 function App() {
   return (
     <Layout style={{ minHeight: "100vh" }}>
+      <Alert
+        type="info"
+        message="Test Modus. Bitte nur Daten zu Testzwecken eingeben. Daten werden automatisch regelmäßig zurückgesetzt."
+        banner={true}
+      />
       <Layout>
         <Header
           style={{
@@ -66,6 +71,7 @@ function App() {
             </Menu.Item>
           </Menu>
         </Header>
+
         <Content style={{ margin: "16px" }}>
           <div
             style={{
