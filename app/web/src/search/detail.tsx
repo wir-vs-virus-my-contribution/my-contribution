@@ -3,7 +3,7 @@ import { Modal, Row, Button, Col } from "antd"
 import { useParams } from "react-router"
 import { useNavigate } from "react-router-dom"
 import { useQuery } from "react-query"
-import { ErrorBanner } from "../utils"
+import { ErrorBanner, info } from "../utils"
 import { Offer } from "../models/helpers/Offer"
 import { MailOutlined } from "@ant-design/icons"
 
@@ -18,9 +18,9 @@ export function Detail() {
 
   return (
     <Modal
-      afterClose={() => navigate("..")}
       style={{ height: 500 }}
       visible={true}
+      closable={false}
       footer={[
         <Button
           onClick={() => {
@@ -33,7 +33,7 @@ export function Detail() {
         <Button
           key="contact"
           onClick={() => {
-            navigate("..")
+            info("Dies ist nur ein Testsystem")
           }}
           type="primary"
           icon={<MailOutlined />}
@@ -45,14 +45,16 @@ export function Detail() {
       <ErrorBanner message={error} />
       {offer && (
         <div>
-          {Object.keys(offer).map((v, i) => (
-            <Row key={i}>
-              <Col md={6}>
-                <b>{v}</b>
-              </Col>
-              <Col md={18}>{offer[v]}</Col>
-            </Row>
-          ))}
+          {["gender", "experience", "availableFrom", "comment", "distance"].map(
+            (v, i) => (
+              <Row key={i}>
+                <Col md={6}>
+                  <b>{v}</b>
+                </Col>
+                <Col md={18}>{offer[v]}</Col>
+              </Row>
+            ),
+          )}
         </div>
       )}
     </Modal>

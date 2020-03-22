@@ -19,22 +19,6 @@ const { Header, Footer, Sider, Content } = Layout
 function App() {
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Alert
-        type="info"
-        message={
-          <div>
-            Test Modus. Bitte nur Daten zu Testzwecken eingeben. Daten werden
-            automatisch regelmäßig zurückgesetzt. Wenn sie jetzt schon
-            Unterstützen möchten klicken sie{" "}
-            <b>
-              <a href="http://corona-helden.net/anmelden" target="blank">
-                hier
-              </a>
-            </b>
-          </div>
-        }
-        banner={true}
-      />
       <Layout>
         <Header
           style={{
@@ -69,10 +53,7 @@ function App() {
             selectedKeys={[]}
           >
             <Menu.Item>
-              <a
-                href="/https://devpost.com/software/meinbeitrag"
-                target="blank"
-              >
+              <a href="https://devpost.com/software/meinbeitrag" target="blank">
                 Infos
               </a>
             </Menu.Item>
@@ -104,8 +85,9 @@ function App() {
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Corona Helden v{process.env["REACT_APP_BUILD_BUILDID"]} |{" "}
-          {process.env["REACT_APP_BUILD_BUILDNUMBER"]}{" "}
+          Corona Helden v0.6 | 2020.03.22
+          {/* v{process.env["REACT_APP_BUILD_BUILDID"]} |{" "}
+          {process.env["REACT_APP_BUILD_BUILDNUMBER"]}{" "} */}
         </Footer>
       </Layout>
     </Layout>

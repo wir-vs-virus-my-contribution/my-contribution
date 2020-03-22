@@ -10,6 +10,8 @@ import {
   getAddress,
   useFields,
   info,
+  TestSystemNotification,
+  useFieldsAndSkills,
 } from "../utils"
 import styled from "styled-components"
 import { useNavigate, Outlet } from "react-router-dom"
@@ -32,23 +34,15 @@ const getData: any = async (v: any, keys: any) => {
 }
 
 export function Search() {
-  const [selectedField, setSelectedField] = React.useState<string | null>(null)
-  const [selectedSkills, setSelectedSkills] = React.useState<string[] | null>(
-    null,
-  )
-
   const navigate = useNavigate()
-  const { data: fields } = useFields()
-  const skills = React.useMemo(() => {
-    if (fields) {
-      const skills = fields
-        .flatMap(v => v.skills)
-        .filter(v => v.fieldId == selectedField)
-      return skills
-    } else {
-      return null
-    }
-  }, [selectedField, fields])
+  const {
+    fields,
+    selectedField,
+    selectedSkills,
+    setSelectedField,
+    setSelectedSkills,
+    skills,
+  } = useFieldsAndSkills()
   const { data, error } = useQuery(
     ["offer", { selectedField, skills: selectedSkills }],
     getData,
@@ -66,7 +60,7 @@ export function Search() {
   return (
     <Page>
       <ErrorBanner message={error} />
-
+      <TestSystemNotification />
       <PageHeader title="Suche">
         <Formik initialValues={{}} onSubmit={() => {}}>
           {f => (
@@ -158,7 +152,7 @@ export function Search() {
                       : "n/a"}
                   </span>
                 ),
-                title: "Beruf",
+                title: "Bereich",
               },
               {
                 render: (v, r) => (

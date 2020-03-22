@@ -101,6 +101,7 @@ namespace MyContribution
                                       new Skill { Title = "Atemwegsmgmt / Intubation" },
                                       new Skill { Title = "Zusatzqualifikation: Desinfektor" },
                                       new Skill { Title = "Instruktor" },
+                                      new Skill { Title = "Altenpfleger" },
                                       new Skill { Title = "Sonstiges" }
                                 }
                             },
@@ -110,10 +111,15 @@ namespace MyContribution
                                 Skills = new[]
                                 {
                                     new Skill { Title = "Pflegehilfskraft/-assistenz" },
+                                    new Skill { Title = "Fachkrankenpflege für Intensiv- und Anästhesiepflege" },
                                     new Skill { Title = "Exam. Gesundheits-/ und Krankenpfleger:in" },
                                     new Skill { Title = "Arz/Ärztin" },
                                     new Skill { Title = "Gesundheits-/ und Krankenpfleger/in in der Ausbildung" },
                                     new Skill { Title = "Medinzinstudent:in" },
+                                    new Skill { Title = "Rettungssanitäter" },
+                                    new Skill { Title = "Rettungsassistent" },
+                                    new Skill { Title = "Notfallsanitäter" },
+                                    new Skill { Title = "Facharzt" },
                                     new Skill { Title = "Sonstiges" }
                                 }
                             },

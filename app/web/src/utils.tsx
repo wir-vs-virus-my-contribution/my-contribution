@@ -36,6 +36,54 @@ export function useFields() {
   return query
 }
 
+export function useFieldsAndSkills() {
+  const [selectedField, setSelectedField] = React.useState<string | null>(null)
+  const [selectedSkills, setSelectedSkills] = React.useState<string[] | null>(
+    null,
+  )
+  const { data: fields } = useFields()
+  const skills = React.useMemo(() => {
+    if (fields) {
+      const skills = fields
+        .flatMap(v => v.skills)
+        .filter(v => v.fieldId == selectedField)
+      return skills
+    } else {
+      return null
+    }
+  }, [selectedField, fields])
+
+  return {
+    selectedField,
+    setSelectedField,
+    selectedSkills,
+    setSelectedSkills,
+    fields,
+    skills,
+  }
+}
+
+export function TestSystemNotification() {
+  return (
+    <Alert
+      type="info"
+      message={
+        <div>
+          Test Modus. Bitte nur Daten zu Testzwecken eingeben. Daten werden
+          automatisch regelmäßig zurückgesetzt. Wenn sie jetzt schon
+          Unterstützen möchten klicken sie{" "}
+          <b>
+            <a href="http://corona-helden.net/anmelden" target="blank">
+              hier
+            </a>
+          </b>
+        </div>
+      }
+      banner={true}
+    />
+  )
+}
+
 export async function getFields() {
   const response = (await fetchJson("/api/offer/fields")) as Field[]
   return response

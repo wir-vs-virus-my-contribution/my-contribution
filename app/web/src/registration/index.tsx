@@ -9,16 +9,22 @@ import {
   Radio,
   SubmitButton,
   Form,
+  FormItem,
 } from "formik-antd"
 import { Formik } from "formik"
 import styled from "styled-components"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { AimOutlined, SendOutlined } from "@ant-design/icons"
 import { OfferRequest } from "../models/helpers/OfferRequest"
 import { Offer } from "../models/helpers/Offer"
-import { Profile } from "./profile"
-import { getLocation, getAddress } from "../utils"
+import {
+  getLocation,
+  getAddress,
+  TestSystemNotification,
+  useFieldsAndSkills,
+} from "../utils"
 import * as Yup from "yup"
+import { Field } from "../models/helpers/Field"
 
 const { Step } = Steps
 
@@ -32,9 +38,17 @@ const SignupSchema = Yup.object().shape({
 const labelCol = { xs: 5 }
 
 export function RegisterView() {
+  const {
+    fields,
+    selectedField,
+    selectedSkills,
+    setSelectedField,
+    setSelectedSkills,
+    skills,
+  } = useFieldsAndSkills()
+
   const [current, setCurrent] = React.useState(0)
   const navigate = useNavigate()
-  const [showSuccess, setShowSuccess] = React.useState<null | Offer>(null)
   return (
     <Card style={{ margin: 60, width: 700 }}>
       <Formik<OfferRequest>
@@ -108,40 +122,38 @@ export function RegisterView() {
                       <Label>
                         In welchem Bereich kannst du Unterstützung anbieten?
                       </Label>
-                      <Checkbox.Group
-                        name="domains"
-                        options={[
-                          { label: "Krankenhaus", value: "1" },
-                          { label: "Pflege", value: "2" },
-                          { label: "Botendienste", value: "3" },
-                          { label: "Seelsorge", value: "4" },
-                          { label: "Sonstige", value: "5" },
-                        ]}
-                      />
-                    </Row>
-                    <Row>
-                      <Label>Welche Qualifikationen hast du?</Label>
                       <Select
-                        size="large"
-                        name="qualifications"
-                        style={{ width: "100%" }}
-                        placeholder="Mehrfachauswahl"
-                        mode="multiple"
+                        placeholder="Bereich"
+                        name="domain"
+                        style={{ width: "150px", marginLeft: 5 }}
+                        onChange={(value, option) => {
+                          setSelectedField(value)
+                        }}
                       >
-                        <Select.Option value={1}>Santitäter</Select.Option>
-                        <Select.Option value={2}>
-                          Gesundheits & Krankenpfleger
-                        </Select.Option>
-                        <Select.Option value={3}>
-                          Gesundheits- & Kinderkrankenpfleger 3
-                        </Select.Option>
-                        <Select.Option value={4}>
-                          Fachkrankenschwester
-                        </Select.Option>
-                        <Select.Option value={5}>Altenpfleger</Select.Option>
-                        <Select.Option value={6}>
-                          Pflegefachhelfer
-                        </Select.Option>
+                        {fields
+                          ? fields.map((v: Field) => (
+                              <Select.Option key={v.id} value={v.id}>
+                                {v.title}
+                              </Select.Option>
+                            ))
+                          : []}
+                      </Select>
+                      <Select
+                        mode="multiple"
+                        placeholder="Fähigkeiten"
+                        name="skills"
+                        style={{ width: "400px", marginLeft: 5, flex: 1 }}
+                        onChange={(value, option) => {
+                          setSelectedSkills(value)
+                        }}
+                      >
+                        {skills
+                          ? skills.map(v => (
+                              <Select.Option key={v.id} value={v.id}>
+                                {v.title}
+                              </Select.Option>
+                            ))
+                          : []}
                       </Select>
                     </Row>
                     <Row>
@@ -155,6 +167,9 @@ export function RegisterView() {
                         name="experience"
                       />
                     </Row>
+                    <div style={{ marginTop: 10 }}>
+                      <TestSystemNotification />
+                    </div>
                   </div>
                   <ButtonRow>
                     <Button size="large" onClick={() => navigate("/")}>
@@ -203,10 +218,7 @@ export function RegisterView() {
                           name="radius"
                           style={{ flex: 1, marginRight: 15 }}
                         />
-                        <InputNumber
-                          name="radius"
-                          formatter={value => `${value} km`}
-                        />
+                        <InputNumber name="radius" />
                       </div>
                     </Row>
                   </div>
@@ -229,12 +241,12 @@ export function RegisterView() {
                   <div>
                     <Row>
                       <Label>Wir finden eine Einsatzmöglichkeit für Dich</Label>
-                      <Label style={{ fontSize: "1rem" }}>
+                      <label style={{ fontSize: "1rem" }}>
                         Bitte hinterlasse uns Deine Kontaktdaten, damit wir uns
                         bei Dir melden können.
-                      </Label>
-                      <Field>
-                        <Form.Item
+                      </label>
+                      <FormItemContainer>
+                        <FormItem
                           labelCol={labelCol}
                           name="gender"
                           label="Geschlecht"
@@ -251,36 +263,40 @@ export function RegisterView() {
                               D
                             </Radio>
                           </Radio.Group>
-                        </Form.Item>
-                      </Field>
-                      <Field>
-                        <Form.Item name="name" label="Name" labelCol={labelCol}>
+                        </FormItem>
+                      </FormItemContainer>
+                      <FormItemContainer>
+                        <FormItem name="name" label="Name" labelCol={labelCol}>
                           <Input
                             name="firstName"
                             placeholder="Vorname Nachname"
                           />
-                        </Form.Item>
-                      </Field>
-                      <Field>
-                        <Form.Item
+                        </FormItem>
+                      </FormItemContainer>
+                      <FormItemContainer>
+                        <FormItem
                           name="phone"
                           label="Telefon"
                           labelCol={labelCol}
                         >
                           <Input name="phone" placeholder="Telefon" />
-                        </Form.Item>
-                      </Field>
-                      <Field>
-                        <Form.Item
+                        </FormItem>
+                      </FormItemContainer>
+
+                      <FormItemContainer>
+                        <FormItem
                           name="email"
                           required={true}
                           label="Email"
                           labelCol={labelCol}
                         >
                           <Input name="email" placeholder="Email" />
-                        </Form.Item>
-                      </Field>
+                        </FormItem>
+                      </FormItemContainer>
                     </Row>
+                    <div style={{ marginTop: 10 }}>
+                      <TestSystemNotification />
+                    </div>
                     <Row>
                       Mit Betätigung des "Absende" Knopfes erkläre ich meine
                       Einwilligung in die Verarbeitung meiner Daten gemäß der
@@ -321,10 +337,6 @@ const Content = styled.div`
   justify-content: space-between;
 `
 
-const Field = styled.div`
-  margin-top: 10px;
-`
-
 const Row = styled.div`
   margin-top: 20px;
 `
@@ -339,4 +351,8 @@ const Label = styled.label`
   display: block;
   margin-bottom: 6px;
   font-size: 1.5rem !important;
+`
+
+const FormItemContainer = styled.div`
+  margin-top: 5px;
 `
