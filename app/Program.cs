@@ -79,44 +79,83 @@ namespace MyContribution
 
                         Field[] fields = new[]
                         {
-                              new Field { Id=Guid.NewGuid(),Description = "",Title ="Pflege",
-                                Skills = new[]
-                                {
-                                    new Skill{Id=Guid.NewGuid(),Title="Blut abnehmen"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Seelsorge"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Pflege"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Organisation"},
+                              new Field
+                              {
+                                  Description = "", Title = "Pflege",
+                                  Skills = new[]
+                                  {
+                                      new Skill { Title = "Intensiv" },
+                                      new Skill { Title = "Blutabnahme" },
+                                      new Skill { Title = "Screening" },
+                                      new Skill { Title = "Röntgen" },
+                                      new Skill { Title = "Dokumente" },
+                                      new Skill { Title = "IV Medikamente" },
+                                      new Skill { Title = "ECMO" },
+                                      new Skill { Title = "Dyalisegeräte" },
+                                      new Skill { Title = "Beatmungsgeräte" },
+                                      new Skill { Title = "Basis Hygienemaßnahmen" },
+                                      new Skill { Title = "Beatmung" },
+                                      new Skill { Title = "Erste Hilfe" },
+                                      new Skill { Title = "Triage" },
+                                      new Skill { Title = "Strukturierte Anamnese" },
+                                      new Skill { Title = "Atemwegsmgmt / Intubation" },
+                                      new Skill { Title = "Zusatzqualifikation: Desinfektor" },
+                                      new Skill { Title = "Instruktor" },
+                                      new Skill { Title = "Sonstiges" }
                                 }
                             },
-                            new Field{ Id=Guid.NewGuid(), Description = "",Title ="Krankenhaus",
+                            new Field
+                            {
+                                Description = "", Title = "Krankenhaus",
                                 Skills = new[]
                                 {
-                                    new Skill{Id=Guid.NewGuid(),Title="Sanitäter"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Blut abnehmen"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Seelsorge"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Pflege"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Verwaltung"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Organisation"},
-                                    new Skill{Id=Guid.NewGuid(),Title="Gesundheitsamt"},
+                                    new Skill { Title = "Pflegehilfskraft/-assistenz" },
+                                    new Skill { Title = "Exam. Gesundheits-/ und Krankenpfleger:in" },
+                                    new Skill { Title = "Arz/Ärztin" },
+                                    new Skill { Title = "Gesundheits-/ und Krankenpfleger/in in der Ausbildung" },
+                                    new Skill { Title = "Medinzinstudent:in" },
+                                    new Skill { Title = "Sonstiges" }
                                 }
                             },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Notdienst", Skills = new List<Skill>() },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Sonstiges", Skills = new List<Skill>() },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Seelsorge", Skills = new List<Skill>() },
-                            new Field{ Id=new Guid("3f9bfdd3-6f79-4301-aa26-dd6e3b92a420"),Description = "",Title ="Praxis", Skills = new List<Skill>() },
-                            new Field{ Id=Guid.NewGuid(),Description = "",Title ="Botendienst", Skills = new List<Skill>() },
+                            new Field
+                            {
+                                Description = "",
+                                Title = "Notdienst",
+                                Skills = new[]
+                                {
+                                    new Skill { Title = "Santitäter" }
+                                }
+                            },
+                            new Field { Description = "", Title = "Sonstiges", Skills = new List<Skill>() },
+                            new Field
+                            {
+                                Description = "",
+                                Title = "Seelsorge",
+                                Skills = new []
+                                {
+                                    new Skill { Title = "Telefonseelsorge"}
+                                }
+                            },
+                            new Field
+                            {
+                                Description = "",
+                                Title = "Praxis",
+                                Skills = new []
+                                {
+                                    new Skill { Title = "Assistenz" },
+                                    new Skill { Title = "Verwaltung" },
+                                }
+                            },
+                            new Field
+                            {
+                                Description = "",
+                                Title = "Botendienst",
+                                Skills = new []
+                                {
+                                    new Skill  { Title = "Führerschein" }
+                                }
+                            },
                         };
-
-                        //Skill[] skills = new[]
-                        //{
-                        //    new Skill{Id=Guid.NewGuid(),Title="Sanitäter"},
-                        //    new Skill{Id=Guid.NewGuid(),Title="Blut abnehmen"},
-                        //    new Skill{Id=Guid.NewGuid(),Title="Seelsorge"},
-                        //    new Skill{Id=Guid.NewGuid(),Title="Pflege"},
-                        //    new Skill{Id=Guid.NewGuid(),Title="Verwaltung"},
-                        //    new Skill{Id=new Guid("1b02ca8b-9858-426c-8c7c-0d88cd2bb94d"),Title="Organisation"},
-                        //    new Skill{Id=Guid.NewGuid(),Title="Gesundheitsamt"},
-                        //};
 
                         Faker faker = new Faker();
                         List<Offer> offers = new Faker<Offer>()
@@ -125,25 +164,32 @@ namespace MyContribution
                             .RuleFor(v => v.Gender, f => f.PickRandom(gender))
                             .RuleFor(v => v.CoronaPassed, f => f.Random.Bool())
                             .RuleFor(v => v.Distance, f => f.Random.Decimal((decimal) 0.1, 100))
-                            .RuleFor(v => v.Experience, f => "" + f.Random.Number(1, 30))
+                            .RuleFor(v => v.Experience, f => "" + f.Random.Number(1, 15))
                             .RuleFor(v => v.AvailableFrom, f => f.PickRandom(new[] { "Vollzeit", "Nachmittags", "Vormittags", "Nachtschicht" }))
                             .RuleFor(v => v.Address, f => f.Address.FullAddress())
                             .RuleFor(v => v.Comment, f => f.Lorem.Paragraph())
                             .RuleFor(v => v.Email, f => f.Person.Email)
                             .RuleFor(v => v.Phone, f => f.Person.Phone)
                             .RuleFor(v => v.DateOfBirth, f => DateTime.Now)
-                            .Generate(100);
+                            .Generate(200);
 
                         foreach (Offer offer in offers)
                         {
-                            offer.Skills = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Skill() { OfferId = offer.Id, SkillId = faker.PickRandom(fields.SelectMany(v => v.Skills)).Id }).Distinct().ToList();
-                            offer.Fields = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Field() { OfferId = offer.Id, FieldId = faker.PickRandom(fields).Id }).Distinct().ToList();
+                            offer.Skills = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Skill()
+                            {
+                                OfferId = offer.Id,
+                                SkillId = faker.PickRandom(fields.SelectMany(v => v.Skills)).Id
+                            }).Distinct().ToList();
+                            offer.Fields = Enumerable.Range(1, faker.Random.Int(1, 3)).Select(x => new Offer_Field()
+                            {
+                                OfferId = offer.Id,
+                                FieldId = faker.PickRandom(fields).Id
+                            }).Distinct().ToList();
                         }
 
                         //db.Skills.AddRange(skills);
                         db.Fields.AddRange(fields);
 
-                        db.SaveChanges();
                         db.Offers.AddRange(offers);
                         db.SaveChanges();
                     }

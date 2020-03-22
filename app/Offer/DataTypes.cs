@@ -15,7 +15,7 @@ namespace MyContribution.Backend
 
     public class Skill
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; }
         public Field Field { get; set; }
         public Guid FieldId { get; set; }
@@ -24,7 +24,7 @@ namespace MyContribution.Backend
 
     public class Field
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; }
         public string Description { get; set; }
         public ICollection<Skill> Skills { get; set; }
@@ -67,7 +67,7 @@ namespace MyContribution.Backend
 
     public class OfferRequest
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string Name { get; set; }
         [Required]
         public Guid[] Fields { get; set; }

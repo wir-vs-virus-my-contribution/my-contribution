@@ -109,7 +109,7 @@ export function Search() {
                   mode="multiple"
                   placeholder="Fähigkeiten"
                   name="skills"
-                  style={{ width: "400px", marginLeft: 5 }}
+                  style={{ width: "400px", marginLeft: 5, flex: 1 }}
                   onChange={(value, option) => {
                     setSelectedSkills(value)
                   }}
@@ -169,12 +169,6 @@ export function Search() {
                   </span>
                 ),
                 title: "Fähigkeiten",
-              },
-              {
-                render: (v, r) => (
-                  <Checkbox checked={r.coronaPassed}></Checkbox>
-                ),
-                title: "Imun",
               },
               { render: (v, r) => r.experience, title: "Erfahrung" },
               { render: (v, r) => r.gender, title: "Geschlecht" },

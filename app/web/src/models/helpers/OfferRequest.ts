@@ -4,7 +4,7 @@
 
 export interface OfferRequest
 {
-	id: string;
+	id: string|null;
 	name: string|null;
 	fields: string[];
 	skills: string[];

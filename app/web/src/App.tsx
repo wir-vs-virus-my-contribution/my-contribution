@@ -21,7 +21,18 @@ function App() {
     <Layout style={{ minHeight: "100vh" }}>
       <Alert
         type="info"
-        message="Test Modus. Bitte nur Daten zu Testzwecken eingeben. Daten werden automatisch regelmäßig zurückgesetzt."
+        message={
+          <div>
+            Test Modus. Bitte nur Daten zu Testzwecken eingeben. Daten werden
+            automatisch regelmäßig zurückgesetzt. Wenn sie jetzt schon
+            Unterstützen möchten klicken sie{" "}
+            <b>
+              <a href="http://corona-helden.net/anmelden" target="blank">
+                hier
+              </a>
+            </b>
+          </div>
+        }
         banner={true}
       />
       <Layout>
@@ -38,12 +49,12 @@ function App() {
           <Menu mode="horizontal" style={{}} selectedKeys={[]}>
             <Menu.Item>
               <Link to="/search">
-                SUCHE <SearchOutlined />
+                Suche <SearchOutlined />
               </Link>
             </Menu.Item>
             <Menu.Item>
               <Link to="/register">
-                ANMELDEN <IdcardOutlined />
+                Anmelden <IdcardOutlined />
               </Link>
             </Menu.Item>
           </Menu>
@@ -58,10 +69,12 @@ function App() {
             selectedKeys={[]}
           >
             <Menu.Item>
-              <Link to="/foo">FAQ</Link>
-            </Menu.Item>
-            <Menu.Item>
-              <Link to="/foo">KONTAKT</Link>
+              <a
+                href="/https://devpost.com/software/meinbeitrag"
+                target="blank"
+              >
+                Infos
+              </a>
             </Menu.Item>
             <Menu.Item>
               <a

@@ -44,6 +44,7 @@ namespace MyContribution.Backend
             Guid offerId = Guid.NewGuid();
             Offer offer = new Offer()
             {
+                Id = offerId,
                 Name = request.Name,
                 Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v }).ToList(),
                 Skills = request.Skills.Select(v => new Offer_Skill { OfferId = offerId, SkillId = v }).ToList(),   //Kann null sein!!
@@ -67,7 +68,7 @@ namespace MyContribution.Backend
         [HttpPost("edit")]
         public async Task<ActionResult<Offer>> Edit(OfferRequest request)
         {
-            Guid offerId = request.Id;
+            Guid offerId = request.Id.Value;
             Offer offer = ctx.Offers.Find(offerId);
             offer.Name = request.Name;
             offer.Fields = request.Fields.Select(v => new Offer_Field { OfferId = offerId, FieldId = v }).ToList();
