@@ -74,7 +74,8 @@ namespace MyContribution.Backend
                 .ThenInclude(v => v.Skill)
                 .Where(v => v.Fields.Any(p => p.FieldId == selectedField));
             IQueryable<Offer> skillmatch = searchResultAll.Where(v => v.Skills.Any(p => skills.Any(o => p.SkillId == o)));
-            searchResultAll = searchResultAll.Except(skillmatch);
+            searchResultAll = searchResultAll.Where(v => v.Skills.All(p => skills.All(o => p.SkillId != o)));
+            //searchResultAll = searchResultAll.Except(skillmatch);
             skillmatch = skillmatch.OrderBy(v => v.Entfernung - start);
             searchResultAll = searchResultAll.OrderBy(v => v.Entfernung - start);
             List<Offer> resultList = await skillmatch.Take(10).ToListAsync();
