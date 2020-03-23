@@ -9,9 +9,9 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "SMTP_HOST": "smtp.1und1.de",
+        "SMTP_HOST": "smtp.ionos.de",
         "SMTP_USER": "noreply@corona-helden.net",
-        "SMTP_PASS": "9eR5%9A2sfqi^Tx7X",
+        "SMTP_PASS": "99pN@gBI31zt@NHog",
         "SMTP_PORT": "587"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
